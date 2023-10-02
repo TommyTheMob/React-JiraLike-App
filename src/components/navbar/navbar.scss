@@ -1,0 +1,92 @@
+.navbar {
+  height: 80px;
+
+  background: #292d3e;
+
+  color: #bdc5d3;
+
+  &__logo {
+    width: 80px;
+    height: 80px;
+
+    margin-bottom: 15px;
+  }
+
+  &__container {
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 0 150px;
+  }
+
+  &__left_side {
+    display: flex;
+    align-items: center;
+  }
+
+  &__create-task-btn {
+    width: 150px;
+    height: 35px;
+
+    color: #bdc5d3;
+    font-size: 16px;
+
+    background: #3d435d;
+
+    padding: 5px 10px;
+
+    border: 1px solid rgba(189, 197, 211, 0.49);
+    border-radius: 5px;
+
+    box-shadow: -7px -4px 31px 0px #000000 inset;
+
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  &__pages {
+
+  }
+
+  &__page {
+    padding: 5px 10px;
+
+    margin-right: 5px;
+
+    color: #bdc5d3;
+
+    cursor: pointer;
+
+    &.active {
+      border: 1px solid rgba(189, 197, 211, 0.7);
+      border-radius: 25px;
+
+      color: rgba(189, 197, 211, 0.7);
+
+      box-shadow: 5px 5px 10px 1px #000000;
+
+      cursor: context-menu;
+    }
+
+    &:hover {
+
+      &:first-child {
+        border: 1px solid rgba(189, 197, 211, 0.7);
+        border-radius: 25px;
+
+        color: rgba(189, 197, 211, 0.7);
+
+        box-shadow: 5px 5px 10px 1px #000000;
+
+        cursor: pointer;
+      }
+    }
+    
+  }
+}
