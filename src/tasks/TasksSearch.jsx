@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-const TasksSearch = ({ projectId, getSearchValue }) => {
+const TasksSearch = ({ getSearchValue }) => {
     const [inputValue, setInputValue] = useState('')
 
     const onInputChange = (e) => {

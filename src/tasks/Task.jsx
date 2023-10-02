@@ -1,9 +1,14 @@
 import React from 'react';
 
-const Task = ({ title, id, desc, createdAt, timeInWork, priority }) => {
+const Task = ({ setModal, setTaskId, title, id, desc, createdAt, timeInWork, priority }) => {
+    const onTaskClick = () => {
+        setModal(true)
+        setTaskId(id)
+    }
+
     return (
         <div>
-            <li className="tasks-cols__tasks-list-item">
+            <li className="tasks-cols__tasks-list-item" onClick={onTaskClick}>
                 <div className="item-info">
                     <h4 className="item-header">{title}</h4>
                     <span className="item-desc">{desc}</span>

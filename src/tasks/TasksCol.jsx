@@ -3,7 +3,7 @@ import Task from "./Task";
 import {connect} from "react-redux";
 import {getProjectsSelector} from "../porjects/projects.selectors";
 
-const TasksCol = ({ colName, projectId, searchValue, projects }) => {
+const TasksCol = ({ colName, projectId, searchValue, setModal, setTaskId, projects }) => {
 
     const getFilteredTasks = (projectId, searchValue) => {
         const currentProject = projects.find(project => project.id === projectId)
@@ -24,7 +24,7 @@ const TasksCol = ({ colName, projectId, searchValue, projects }) => {
                         {
                             getFilteredTasks(projectId, searchValue)
                                 .map(task => (
-                                    colName === task.status && <Task key={task.id} {...task} />
+                                    colName === task.status && <Task setModal={setModal} setTaskId={setTaskId} key={task.id} {...task} />
                                 ))
                         }
                     </ul>
