@@ -23,6 +23,34 @@
   }
 
   &__search-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    height: 25px;
+
+    outline: none;
+
+    padding: 3px;
+  }
+
+  &__search-btn {
+    background: rgba(204, 204, 204, 0.4);
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    width: 50px;
+
+    text-transform: uppercase;
+    color: #565656;
+    
+    &:hover {
+      cursor: pointer;
+      background: #cccccc;
+    }
+  }
+
+  &__search-input {
     margin-left: 30px;
     margin-right: 10px;
   }
@@ -32,19 +60,30 @@
     justify-content: space-around;
 
   }
+
+  &__tasks-col {
+    margin-top: 50px;
+
+    border: 1px solid #ccc;
+    border-radius: 15px;
+
+    background: rgba(204, 204, 204, 0.3);
+  }
 }
 
 
 .tasks-cols {
 
+  &__header {
+    margin-top: 10px;
+  }
+
   &__tasks-list {
     list-style: none;
 
-    border: 1px solid #ccc;
-
     padding: 20px;
 
-    width: 500px;
+    width: 300px;
 
     display: flex;
     flex-direction: column;
@@ -53,10 +92,48 @@
 
   &__tasks-list-item {
     width: 250px;
-    height: 150px;
 
     border: 1px solid #ccc;
+    border-radius: 15px;
 
     margin-bottom: 10px;
+
+    &:hover {
+      border: 3px dotted #ccc;
+      background: bisque;
+
+      cursor: pointer;
+    }
   }
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  padding: 5px;
+
+}
+
+.item-header {
+  margin-bottom: 10px;
+
+  overflow-wrap: break-word;
+}
+
+.item-desc {
+  background: #ccc;
+
+  text-align: start;
+
+  padding: 5px;
+
+  border-radius: 5px;
+}
+
+.item-id {
+  text-align: start;
+
+  padding: 5px;
 }

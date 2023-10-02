@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 // Getting projects from store to generate routes
-const projects = store.getState().projects.projects
+const projects = store.getState().projects.projectsList
 
 const projectRoutes = projects.map(project => (
     {

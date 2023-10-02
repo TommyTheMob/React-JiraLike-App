@@ -1,3 +1,3 @@
 export const getProjectsSelector = state => {
-    return state.projects.projects
+    return state.projects.projectsList
 }
