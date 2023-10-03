@@ -1,5 +1,6 @@
 export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT'
-export const FIND_TASK = 'PROJECTS/FIND_TASK'
+export const CHANGE_TASK_STATUS = 'PROJECTS/CHANGE_TASK_STATUS'
+
 
 export const createProject = (projectName) => {
     return {
@@ -10,12 +11,13 @@ export const createProject = (projectName) => {
     }
 }
 
-export const findTask = (projectId, inputValue) => {
+export const changeTaskStatus = (projectId, taskId, taskStatus) => {
     return {
-        type: FIND_TASK,
+        type: CHANGE_TASK_STATUS,
         payload: {
             projectId,
-            inputValue,
+            taskId,
+            taskStatus,
         }
     }
 }

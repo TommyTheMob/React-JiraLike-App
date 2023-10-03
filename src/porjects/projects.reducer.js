@@ -1,4 +1,4 @@
-import {CREATE_PROJECT, FIND_TASK} from "./projects.actions";
+import {CREATE_PROJECT, CHANGE_TASK_STATUS} from "./projects.actions";
 
 const projectsList = [
     {
@@ -8,9 +8,10 @@ const projectsList = [
             {
                 title: "task 1 header",
                 id: "1",
+                author: "Egar",
                 status: "queue",
                 desc: "queued task 1",
-                createdAt: +(new Date()),
+                createdAt: new Date('1995-12-17T03:24:00'),
                 timeInWork: 0,
                 priority: "low",
                 connectedFiles: "",
@@ -19,9 +20,10 @@ const projectsList = [
             {
                 title: "task 2",
                 id: "2",
+                author: "",
                 status: "development",
                 desc: "task 2 in dev",
-                createdAt: +(new Date()),
+                createdAt: new Date('1995-12-17T03:24:00'),
                 timeInWork: 3600,
                 priority: "medium",
                 connectedFiles: "",
@@ -30,9 +32,10 @@ const projectsList = [
             {
                 title: "task 3",
                 id: "3",
+                author: "",
                 status: "done",
                 desc: "task 3 is done",
-                createdAt: +(new Date()),
+                createdAt: new Date('1995-12-17T03:24:00'),
                 timeInWork: 7200,
                 priority: "high",
                 connectedFiles: "",
@@ -47,6 +50,7 @@ const projectsList = [
             {
                 title: "task 1",
                 id: "1",
+                author: "",
                 status: "done",
                 desc: "",
                 createdAt: new Date(),
@@ -64,6 +68,7 @@ const projectsList = [
             {
                 title: "task 1",
                 id: "1",
+                author: "",
                 status: "",
                 desc: "",
                 createdAt: new Date(),
@@ -81,6 +86,7 @@ const projectsList = [
             {
                 title: "task 1",
                 id: "1",
+                author: "",
                 status: "",
                 desc: "",
                 createdAt: new Date(),
@@ -109,17 +115,29 @@ export const projectsReducer = (state = initialState, action) => {
                 })
             }
         }
-        case FIND_TASK: {
+        case CHANGE_TASK_STATUS: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const newTask = {
+                ...currentTask,
+                status: action.payload.taskStatus
+            }
+
+            const newProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? newTask : task
+                )),
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? newProject : project
+            ))
+
             return {
                 ...state,
-                projectsList: state.projectsList
-                    .map(project => {
-                        if (project.id === action.payload.projectId) {
-                            project.tasks = project.tasks.filter(task => task.id === action.payload.inputValue || task.title === action.payload.inputValue)
-                            return project
-                        }
-                        return project
-                    })
+                projectsList: updatedList
             }
         }
         default:
