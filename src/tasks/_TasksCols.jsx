@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import TasksCol from "./TasksCol";
 
-const TasksCols = ({ projectId, searchValue, setModal, setTaskId }) => {
+const _TasksCols = ({ projectId, searchValue, setModal, setTaskId }) => {
     const [currentBoard, setCurrentBoard] = useState(null)
 
     const [boards, setBoards] = useState([
@@ -36,4 +36,4 @@ const TasksCols = ({ projectId, searchValue, setModal, setTaskId }) => {
     // );
 };
 
-export default TasksCols;
+export default _TasksCols;

@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import Navbar from "../components/navbar/Navbar";
 import './tasksListPage.scss'
-import TasksCols from "./TasksCols";
 import TasksSearch from "./TasksSearch";
 import Modal from "../components/modal/Modal";
 import TaskInModal from "./TaskInModal";
+import TasksCol from "./TasksCol";
+
 
 const TasksListPage = ({ projectId }) => {
     const [searchValue, setSearchValue] = useState('')
@@ -22,7 +23,42 @@ const TasksListPage = ({ projectId }) => {
                     <h1 className="tasks-list__header">Tasks status</h1>
                     <div className="tasks-list__container">
                         <TasksSearch getSearchValue={setSearchValue} />
-                        <TasksCols setModal={setModalActive} setTaskId={setTaskId} searchValue={searchValue} projectId={projectId} />
+
+                        <div className="tasks-list__tasks-cols">
+
+                            <TasksCol
+                                colStatus="Queue"
+                            />
+
+                            <TasksCol
+                                colStatus="Development"
+                            />
+
+                            <TasksCol
+                                colStatus="Done"
+                            />
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {/*<TasksCols setModal={setModalActive} setTaskId={setTaskId} searchValue={searchValue} projectId={projectId} />*/}
                     </div>
                 </div>
             </div>

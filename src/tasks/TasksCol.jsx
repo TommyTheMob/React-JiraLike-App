@@ -1,33 +1,26 @@
 import React from 'react';
 import Task from "./Task";
 import {connect} from "react-redux";
-import {getProjectsSelector} from "../porjects/projects.selectors";
+import {getTasksSelector} from "./tasks.selectors";
 
-const TasksCol = ({ colName, projectId, searchValue, setModal, setTaskId, projects, setCurrentBoard }) => {
 
-    const getFilteredTasks = (projectId, searchValue) => {
-        const currentProject = projects.find(project => project.id === projectId)
-
-        if (searchValue !== '') {
-            return currentProject.tasks.filter(task => task.id === searchValue || task.title.includes(searchValue))
-        }
-
-        return currentProject.tasks
-    }
+const TasksCol = (props) => {
+    const { colStatus } = props
 
     return (
         <>
             <div className="tasks-list__tasks-col">
-                <h3 className="tasks-cols__header">{ colName }</h3>
+                <h3 className="tasks-cols__header">{colStatus}</h3>
                 <div className="tasks-cols__content">
+
                     <ul className="tasks-cols__tasks-list">
-                        {
-                            getFilteredTasks(projectId, searchValue)
-                                .map(task => (
-                                    colName === task.status && <Task projectId={projectId} setCurrentBoard={setCurrentBoard} taskItem={task} setModal={setModal} setTaskId={setTaskId} key={task.id} {...task} />
-                                ))
-                        }
+
+                        <Task
+
+                        />
+
                     </ul>
+
                 </div>
             </div>
         </>
@@ -36,7 +29,7 @@ const TasksCol = ({ colName, projectId, searchValue, setModal, setTaskId, projec
 
 const mapState = state => {
     return {
-        projects: getProjectsSelector(state)
+        tasks: getTasksSelector(state, )
     }
 }
 
