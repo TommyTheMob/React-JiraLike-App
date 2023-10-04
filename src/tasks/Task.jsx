@@ -1,68 +1,87 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {connect} from "react-redux";
 import * as projectsActions from '../porjects/projects.actions'
-import {changeTaskStatus} from "../porjects/projects.actions";
 
-const Task = ({ setModal, setTaskId, projectId, title, id, desc, createdAt, timeInWork, priority, status, taskItem, setCurrentBoard, changeTaskStatus }) => {
-    const [currentItemId, setCurrentItemId] = useState(id)
-    
+const Task = (props) => {
+
+    const {
+        setModal,
+        setTaskId,
+        setGrabbedTaskId,
+        onDragOver,
+        onDragLeave,
+        onDragStart,
+        onDragEnd,
+        onDrop,
+        projectId,
+        changeTaskStatus,
+        title,
+        id,
+        desc
+    } = props
+
     const onTaskClick = () => {
         setModal(true)
         setTaskId(id)
     }
 
-
-    const dragOverHandler = (e) => {
+    const handleDragOver = (e) => {
         e.preventDefault()
-        // console.log(e.target)
         if (e.target.className === 'tasks-cols__tasks-list-item') {
             e.target.style.boxShadow = '0 4px 3px gray'
         }
+        onDragOver()
+        // console.log('task id:', id)
     }
 
-    const dragLeaveHandler = (e) => {
+    const handleDragLeave = (e) => {
         e.target.style.boxShadow = 'none'
+        onDragLeave()
+        // console.log('task id:', id)
     }
 
-    const dragStartHandler = (e, id) => {
-        console.log(e.target)
-        setCurrentItemId(id)
+    const handleDragStart = (e) => {
+        onDragStart()
+        // console.log('task id:', id)
     }
 
-    const dragEndHandler = (e) => {
+    const handleDragEnd = (e) => {
         e.target.style.boxShadow = 'none'
+        setGrabbedTaskId(id)
+        onDragEnd()
+        // console.log('task id:', id)
     }
 
-    const dragDropHandler = (e) => {
-            e.preventDefault()
-            console.log(e.target.closest('.tasks-list__tasks-col').querySelector('.tasks-cols__header').textContent)
-            const status = e.target.closest('.tasks-list__tasks-col').querySelector('.tasks-cols__header').textContent
-            changeTaskStatus(projectId, currentItemId, status)
+    const handleDragDrop = (e) => {
+        e.preventDefault()
+        onDrop()
+        // console.log('task id:', id)
+
     }
 
-
+    // 1. when HandleDragStart - save the dragging task's id
+    // 2. when handleDragDrop - get the col's status and save it +
+    // 3. when handleDragDrop - call changeTaskStatus with dragging task's id and col's status
 
     return (
-        <div
-            className="list-item-container"
-            onDragOver={(e) => dragOverHandler(e)}
-            onDragLeave={(e) => dragLeaveHandler(e)}
-            onDragStart={(e) => dragStartHandler(e, id)}
-            onDragEnd={(e) => dragEndHandler(e)}
-            onDrop={(e) => dragDropHandler(e)}
-            draggable={true}
-        >
-            <li className="tasks-cols__tasks-list-item" onClick={onTaskClick}>
+        <>
+            <li
+                className="tasks-cols__tasks-list-item"
+                onClick={onTaskClick}
+                draggable={true}
+                onDragOver={(e) => {handleDragOver(e)}}
+                onDragLeave={(e) => {handleDragLeave(e)}}
+                onDragStart={(e) => {handleDragStart(e)}}
+                onDragEnd={(e) => {handleDragEnd(e)}}
+                onDrop={(e) => {handleDragDrop(e)}}
+            >
                 <div className="item-info">
                     <h4 className="item-header">{title}</h4>
                     <span className="item-desc">{desc}</span>
-                    {/*<span className="item-createdAt">{(new Date(createdAt)).toString()}</span>*/}
-                    {/*<span className="item-time-in-work">{timeInWork}</span>*/}
-                    {/*<span className="item-priority">{priority}</span>*/}
                     <span className="item-id">#{id}</span>
                 </div>
             </li>
-        </div>
+        </>
     );
 };
 
