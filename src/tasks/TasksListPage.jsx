@@ -35,7 +35,7 @@ const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) =>
 
         }
 
-        sortTasksInColbyDrag(projectId, source.droppableId, destination.droppableId, source.index, destination.index, draggableId)
+        // sortTasksInColbyDrag(projectId, source.droppableId, destination.droppableId, source.index, destination.index, draggableId)
 
     }
 

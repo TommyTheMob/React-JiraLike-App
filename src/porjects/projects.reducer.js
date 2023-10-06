@@ -1,4 +1,4 @@
-import {CREATE_PROJECT, CHANGE_TASK_STATUS, SORT_TASKS_IN_COL_BY_DRAG} from "./projects.actions";
+import {CREATE_PROJECT, CHANGE_TASK_STATUS, ADD_FILES_TO_TASK, DELETE_FILE_FROM_TASK, EDIT_TASK_DESCRIPTION, SORT_TASKS_IN_COL_BY_DRAG} from "./projects.actions";
 
 const projectsList = [
     {
@@ -14,7 +14,7 @@ const projectsList = [
                 createdAt: new Date('1995-12-17T03:24:00'),
                 timeInWork: 0,
                 priority: "low",
-                connectedFiles: "",
+                connectedFiles: [],
                 chainedTo: []
             },
             {
@@ -140,33 +140,112 @@ export const projectsReducer = (state = initialState, action) => {
                 projectsList: updatedList
             }
         }
-        case SORT_TASKS_IN_COL_BY_DRAG: {
-            const {
-                projectId,
-                droppableIdStart,
-                droppableIdEnd,
-                droppableIndexStart,
-                droppableIndexEnd,
-                draggableId
-            } = action.payload
+        case ADD_FILES_TO_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
 
-            const currentProject = state.projectsList.concat().find(project => project.id === projectId)
-            const tasks = currentProject.tasks
+            const filesToAdd = Object.entries(action.payload.filesObject).map(file => file[1])
 
-            if (droppableIdStart === droppableIdEnd) {
-                // const tasksInCol = tasks.filter(task => droppableIdStart === task.status)
-
-                const task = tasks.splice(droppableIndexStart, 1)
-                tasks.splice(droppableIndexEnd, 0, ...task)
+            const updatedTask = {
+                ...currentTask,
+                connectedFiles: currentTask.connectedFiles.concat(filesToAdd)
             }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
 
             return {
                 ...state,
-                projectsList: state.projectsList.map(project => (
-                    project.id === currentProject.id ? currentProject : project
-                ))
+                projectsList: updatedList
             }
         }
+        case DELETE_FILE_FROM_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedFiles = currentTask.connectedFiles.filter(file => file.name !== action.payload.file.name)
+
+            const updatedTask = {
+                ...currentTask,
+                connectedFiles: updatedFiles
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case EDIT_TASK_DESCRIPTION: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                desc: action.payload.desc
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        // case SORT_TASKS_IN_COL_BY_DRAG: {
+        //     const {
+        //         projectId,
+        //         droppableIdStart,
+        //         droppableIdEnd,
+        //         droppableIndexStart,
+        //         droppableIndexEnd,
+        //         draggableId
+        //     } = action.payload
+        //
+        //     const currentProject = state.projectsList.concat().find(project => project.id === projectId)
+        //     const tasks = currentProject.tasks
+        //
+        //     if (droppableIdStart === droppableIdEnd) {
+        //         // const tasksInCol = tasks.filter(task => droppableIdStart === task.status)
+        //
+        //         const task = tasks.splice(droppableIndexStart, 1)
+        //         tasks.splice(droppableIndexEnd, 0, ...task)
+        //     }
+        //
+        //     return {
+        //         ...state,
+        //         projectsList: state.projectsList.map(project => (
+        //             project.id === currentProject.id ? currentProject : project
+        //         ))
+        //     }
+        // }
         default:
             return state
     }

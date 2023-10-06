@@ -1,14 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getProjectsSelector} from "../porjects/projects.selectors";
 import {connect} from "react-redux";
 import './taskInModal.scss'
 import * as projectsActions from "../porjects/projects.actions";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import {IconContext} from "react-icons";
+import {BsDashCircleFill, BsFillPlusCircleFill, BsPlus} from "react-icons/bs";
+import {BiMinus} from "react-icons/bi";
+import {MdOutlineModeEditOutline} from "react-icons/md";
 
 
-const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus }) => {
+const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesToTask, deleteFileFromTask, editTaskDescription }) => {
     const [dropdownVisible, setDropdownVisible] = useState(false)
+    const [selectedFiles, setSelectedFiles] = useState(null)
+    const [editDesc, setEditDesc] = useState(false)
 
     if (!taskId) {
         return null
@@ -19,7 +24,8 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus }) => {
             .tasks
                 .find(task => task.id === taskId)
 
-    const { id, title, status, author, createdAt, timeInWork, priority } = task
+    const { id, title, status, author, createdAt, timeInWork, priority, connectedFiles, desc } = task
+
 
     const onDropdownItemClick = (statusName) => {
         setDropdownVisible(false)
@@ -42,6 +48,15 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus }) => {
         }
     }
 
+    const handleAddFilesBtnClick = () => {
+       selectedFiles && addFilesToTask(projectId, taskId, selectedFiles)
+    }
+
+    const handleTxtAreaSize = (e) => {
+        // e.target.style.height = "5px";
+        e.target.style.height = (e.target.scrollHeight) + "px";
+    }
+
     return (
         <div className="task-modal__container" onClick={() => {setDropdownVisible(false)}}>
             <div className="task-modal__header">
@@ -54,16 +69,63 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus }) => {
                 <div className="left-col">
                     <h2 className="task-header">{title}</h2>
                     <div className="task-description__container">
-                        <span className="task-description__title">Description</span>
-                        <div className="task-description__desc">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad cumque dolor expedita, hic impedit ipsam laboriosam natus placeat, porro possimus tempore veritatis. Ab, architecto consectetur dolores dolorum enim, eos est et facere fuga harum ipsam libero, magni nam nobis officiis perspiciatis possimus quaerat quasi quia quisquam saepe sit voluptatibus!
+                        <div className="task-description__title-container">
+                            <span className="task-description__title">Description</span>
+                            <MdOutlineModeEditOutline
+                                className="task-description__edit-btn"
+                                onClick={() => setEditDesc(true)}
+                            />
                         </div>
+                        {
+                            editDesc
+                                ?
+                                    <div className="task-description__desc">
+                                        {/*<input*/}
+                                        {/*    className="task-description__edit-desc-input"*/}
+                                        {/*    type='textarea'*/}
+                                        {/*    value={desc}*/}
+                                        {/*    onChange={(e) => editTaskDescription(projectId, taskId, e.target.value)}*/}
+                                        {/*/>*/}
+                                        <textarea
+                                            className="task-description__edit-desc-input"
+                                            onChange={(e) => editTaskDescription(projectId, taskId, e.target.value)}
+                                            onInput={(e) => handleTxtAreaSize(e)}
+                                            value={desc}
+                                        />
+                                        <button onClick={() => setEditDesc(false)} className="task-description__apply-edit-btn">Apply</button>
+                                    </div>
+
+                                :
+                                    <div className="task-description__desc">
+                                        {desc}
+                                    </div>
+                        }
                     </div>
                     <div className="task-includes__container">
                         <span className="task-includes__title">Includes</span>
                         <div className="task-includes__content-wrapper">
-                            <div className="task-includes__files">files here</div>
-                            <div className="task-includes__btns">- +</div>
+                            {/*<div className="task-includes__btns">*/}
+                            {/*    <BsPlus style={{fontSize: 20}} />*/}
+                            {/*    <BiMinus />*/}
+                            {/*</div>*/}
+                            <input
+                                className='task-includes__input-file'
+                                type="file" multiple
+                                onChange={(event) => setSelectedFiles(event.target.files)}
+                            />
+                            <button onClick={handleAddFilesBtnClick}>Add to task</button>
+                            <div className="task-includes__files">
+                                {connectedFiles.length !== 0 &&
+                                    connectedFiles.map(file => (
+                                        <div className='task-includes__file-item' key={file.name}>
+                                            <span className='task-includes__file-item-name' style={{fontWeight:"bold"}}>{file.name.slice(0, 11)}</span>
+                                            <span className='task-includes__file-item-type'>{file.type}</span>
+                                            <span className='task-includes__file-item-size'>{(file.size * 10**-6).toString().slice(0, 4)} Mb</span>
+                                            <span onClick={() => deleteFileFromTask(projectId, taskId, file)} className='task-includes__file-item-delete'>x</span>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className="sub-tasks__container">
@@ -131,7 +193,10 @@ const mapState = state => {
 }
 
 const mapDispatch = {
-    changeTaskStatus: projectsActions.changeTaskStatus
+    changeTaskStatus: projectsActions.changeTaskStatus,
+    addFilesToTask: projectsActions.addFilesToTask,
+    deleteFileFromTask: projectsActions.deleteFileFromTask,
+    editTaskDescription: projectsActions.editTaskDescription,
 }
 
 export default connect(mapState, mapDispatch)(TaskInModal);

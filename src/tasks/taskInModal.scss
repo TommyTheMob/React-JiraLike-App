@@ -43,13 +43,56 @@
     padding: 5px;
   }
 
+  &__title-container {
+
+  }
+
   &__title {
     color: #565656;
+  }
+
+  &__edit-btn {
+    font-size: 12px;
+
+    margin-left: 3px;
+
+    color: #696969;
+
+    cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
+  }
+
+  &__edit-container {
+
+  }
+
+  &__edit-desc-input {
+    border: none;
+
+    outline: none;
+
+    resize: none;
+
+    min-height: 50px;
+    width: 780px;
+
+    font-size: 16px;
+  }
+
+  &__apply-edit-btn {
+
   }
 
   &__desc {
     border: 1px solid #ccc;
     padding: 5px;
+
+    overflow-x: hidden;
   }
 }
 
@@ -238,5 +281,44 @@
     color: #565656;
   }
 
+}
+
+.task-includes {
+  &__content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    padding: 5px;
+  }
+
+  &__input-file {
+
+  }
+
+  &__files {
+    margin-top: 10px;
+  }
+
+  &__file-item {
+    margin-bottom: 5px;
+
+    padding: 3px;
+
+    background: rgba(204, 204, 204, 0.4);
+  }
+
+  &__file-item-name,
+  &__file-item-type {
+    margin-right: 5px;
+  }
+
+  &__file-item-delete {
+    float: right;
+
+    margin-right: 3px;
+
+    cursor: pointer;
+  }
 
 }
