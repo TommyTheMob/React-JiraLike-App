@@ -1,4 +1,4 @@
-import {CREATE_PROJECT, CHANGE_TASK_STATUS} from "./projects.actions";
+import {CREATE_PROJECT, CHANGE_TASK_STATUS, SORT_TASKS_IN_COL_BY_DRAG} from "./projects.actions";
 
 const projectsList = [
     {
@@ -7,7 +7,7 @@ const projectsList = [
         tasks: [
             {
                 title: "task 1 header",
-                id: "1",
+                id: Math.round(Math.random() * 1000000).toString(),
                 author: "Egar",
                 status: "queue",
                 desc: "queued task 1",
@@ -19,7 +19,7 @@ const projectsList = [
             },
             {
                 title: "task 2",
-                id: "2",
+                id: Math.round(Math.random() * 1000000).toString(),
                 author: "",
                 status: "development",
                 desc: "task 2 in dev",
@@ -31,7 +31,7 @@ const projectsList = [
             },
             {
                 title: "task 3",
-                id: "3",
+                id: Math.round(Math.random() * 1000000).toString(),
                 author: "",
                 status: "done",
                 desc: "task 3 is done",
@@ -138,6 +138,33 @@ export const projectsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 projectsList: updatedList
+            }
+        }
+        case SORT_TASKS_IN_COL_BY_DRAG: {
+            const {
+                projectId,
+                droppableIdStart,
+                droppableIdEnd,
+                droppableIndexStart,
+                droppableIndexEnd,
+                draggableId
+            } = action.payload
+
+            const currentProject = state.projectsList.concat().find(project => project.id === projectId)
+            const tasks = currentProject.tasks
+
+            if (droppableIdStart === droppableIdEnd) {
+                // const tasksInCol = tasks.filter(task => droppableIdStart === task.status)
+
+                const task = tasks.splice(droppableIndexStart, 1)
+                tasks.splice(droppableIndexEnd, 0, ...task)
+            }
+
+            return {
+                ...state,
+                projectsList: state.projectsList.map(project => (
+                    project.id === currentProject.id ? currentProject : project
+                ))
             }
         }
         default:
