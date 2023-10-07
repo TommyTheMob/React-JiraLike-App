@@ -9,6 +9,14 @@
     justify-content: space-between;
   }
 
+  &__header-btns {
+
+  }
+
+  &__close-btn {
+    cursor: pointer;
+  }
+
   &__cols {
     display: flex;
 
@@ -51,6 +59,7 @@
     color: #565656;
   }
 
+
   &__edit-btn {
     font-size: 12px;
 
@@ -84,15 +93,35 @@
     font-size: 16px;
   }
 
+  &__edit-btn-group {
+    margin-top: 10px;
+  }
+
   &__apply-edit-btn {
+    margin-right: 5px;
+  }
+
+  &__cancel-edit-btn {
 
   }
 
   &__desc {
     border: 1px solid #ccc;
-    padding: 5px;
+    border-radius: 4px;
+
+    padding: 8px;
 
     overflow-x: hidden;
+
+
+  }
+
+  &__desc-inner {
+    background: rgba(204, 204, 204, 0.2);
+
+    padding: 5px;
+
+    border-radius: 4px;
   }
 }
 
@@ -107,10 +136,23 @@
     color: #565656;
   }
 
-  &__content-wrapper {
-    display: flex;
-    justify-content: space-between;
+  &__add-btn {
+    font-size: 16px;
 
+    margin-left: 3px;
+
+    color: #696969;
+
+    cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
+  }
+
+  &__content-wrapper {
     border: 1px solid #ccc;
 
     padding: 5px;
@@ -150,6 +192,7 @@
 
   &__comments {
     border: 1px solid #ccc;
+    border-radius: 4px;
 
     padding: 5px;
   }
@@ -287,13 +330,22 @@
   &__content-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: start;
 
     padding: 5px;
+
+    border-radius: 4px;
   }
 
   &__input-file {
-
+    &.hidden {
+      opacity: 0;
+      height: 0;
+      width: 0;
+      line-height: 0;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
   }
 
   &__files {
@@ -305,12 +357,14 @@
 
     padding: 3px;
 
-    background: rgba(204, 204, 204, 0.4);
+    background: rgba(204, 204, 204, 0.2);
+
+    border-radius: 4px;
   }
 
   &__file-item-name,
   &__file-item-type {
-    margin-right: 5px;
+    margin-right: 10px;
   }
 
   &__file-item-delete {
@@ -321,4 +375,8 @@
     cursor: pointer;
   }
 
+}
+
+.tox-statusbar__branding {
+  display: none;
 }

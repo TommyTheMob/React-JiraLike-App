@@ -48,6 +48,7 @@ const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) =>
                 <TaskInModal
                     taskId={taskId}
                     projectId={projectId}
+                    setModal={setModalActive}
                 />
             </Modal>
             <div className="page__content">

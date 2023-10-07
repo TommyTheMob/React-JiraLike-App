@@ -1,19 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {getProjectsSelector} from "../porjects/projects.selectors";
 import {connect} from "react-redux";
 import './taskInModal.scss'
 import * as projectsActions from "../porjects/projects.actions";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import {IconContext} from "react-icons";
-import {BsDashCircleFill, BsFillPlusCircleFill, BsPlus} from "react-icons/bs";
-import {BiMinus} from "react-icons/bi";
-import {MdOutlineModeEditOutline} from "react-icons/md";
+import {MdDeleteForever, MdOutlineModeEditOutline} from "react-icons/md";
+import {Editor} from "@tinymce/tinymce-react";
+import {AiOutlineClose, AiOutlineFileAdd} from "react-icons/ai";
+import TaskComments from "./TaskComments";
 
 
-const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesToTask, deleteFileFromTask, editTaskDescription }) => {
+const TaskInModal = ({ taskId, projectId, setModal, projects, changeTaskStatus, addFilesToTask, deleteFileFromTask, editTaskDescription }) => {
     const [dropdownVisible, setDropdownVisible] = useState(false)
-    const [selectedFiles, setSelectedFiles] = useState(null)
     const [editDesc, setEditDesc] = useState(false)
+    const [editorValue, setEditorValue] = useState('')
+    const filePicker = useRef(null)
 
     if (!taskId) {
         return null
@@ -48,21 +50,16 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesTo
         }
     }
 
-    const handleAddFilesBtnClick = () => {
-       selectedFiles && addFilesToTask(projectId, taskId, selectedFiles)
-    }
-
-    const handleTxtAreaSize = (e) => {
-        // e.target.style.height = "5px";
-        e.target.style.height = (e.target.scrollHeight) + "px";
-    }
 
     return (
         <div className="task-modal__container" onClick={() => {setDropdownVisible(false)}}>
             <div className="task-modal__header">
                 <span className="task-modal__id">{id}</span>
                 <div className="task-modal__header-btns">
-                    x
+                    <AiOutlineClose
+                        className="task-modal__close-btn"
+                        onClick={() => setModal(false)}
+                    />
                 </div>
             </div>
             <div className="task-modal__cols">
@@ -79,41 +76,65 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesTo
                         {
                             editDesc
                                 ?
-                                    <div className="task-description__desc">
-                                        {/*<input*/}
-                                        {/*    className="task-description__edit-desc-input"*/}
-                                        {/*    type='textarea'*/}
-                                        {/*    value={desc}*/}
-                                        {/*    onChange={(e) => editTaskDescription(projectId, taskId, e.target.value)}*/}
-                                        {/*/>*/}
-                                        <textarea
-                                            className="task-description__edit-desc-input"
-                                            onChange={(e) => editTaskDescription(projectId, taskId, e.target.value)}
-                                            onInput={(e) => handleTxtAreaSize(e)}
-                                            value={desc}
+                                    <>
+                                        <Editor
+                                            apiKey='8ve8okstzg59eg1ewpa2p85hshxcts8o7dw3ze38wwl38v6r'
+                                            initialValue={desc}
+                                            value={editorValue}
+                                            onEditorChange={(newValue, editor) => {
+                                                setEditorValue(editor.getContent())
+                                            }}
+                                            init={{
+                                                menubar: false,
+                                            }}
                                         />
-                                        <button onClick={() => setEditDesc(false)} className="task-description__apply-edit-btn">Apply</button>
-                                    </div>
+                                        <div className='task-description__edit-btn-group'>
+                                            <button
+                                                className='task-description__apply-edit-btn btn'
+                                                onClick={() => {
+                                                    editTaskDescription(projectId, taskId, editorValue)
+                                                    setEditDesc(!editDesc)
+                                                }}
+                                            >
+                                                Apply changes
+                                            </button>
+                                            <button
+                                                className='task-description__cancel-edit-btn btn'
+                                                onClick={() => {
+                                                    setEditDesc(!editDesc)
+                                                }}
+                                            >
+                                                Cancel editing
+                                            </button>
+                                        </div>
+                                    </>
 
                                 :
-                                    <div className="task-description__desc">
-                                        {desc}
+                                    <div
+                                        className="task-description__desc"
+                                    >
+                                        <div
+                                            className="task-description__desc-inner"
+                                            dangerouslySetInnerHTML={{ __html: desc }}
+                                        />
                                     </div>
+
                         }
                     </div>
                     <div className="task-includes__container">
                         <span className="task-includes__title">Includes</span>
+                        <AiOutlineFileAdd
+                            className='task-includes__add-btn'
+                            onClick={() => filePicker.current.click()}
+                        />
                         <div className="task-includes__content-wrapper">
-                            {/*<div className="task-includes__btns">*/}
-                            {/*    <BsPlus style={{fontSize: 20}} />*/}
-                            {/*    <BiMinus />*/}
-                            {/*</div>*/}
                             <input
-                                className='task-includes__input-file'
+                                className='task-includes__input-file hidden'
                                 type="file" multiple
-                                onChange={(event) => setSelectedFiles(event.target.files)}
+                                onChange={(event) => addFilesToTask(projectId, taskId, event.target.files)
+                                }
+                                ref={filePicker}
                             />
-                            <button onClick={handleAddFilesBtnClick}>Add to task</button>
                             <div className="task-includes__files">
                                 {connectedFiles.length !== 0 &&
                                     connectedFiles.map(file => (
@@ -121,7 +142,11 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesTo
                                             <span className='task-includes__file-item-name' style={{fontWeight:"bold"}}>{file.name.slice(0, 11)}</span>
                                             <span className='task-includes__file-item-type'>{file.type}</span>
                                             <span className='task-includes__file-item-size'>{(file.size * 10**-6).toString().slice(0, 4)} Mb</span>
-                                            <span onClick={() => deleteFileFromTask(projectId, taskId, file)} className='task-includes__file-item-delete'>x</span>
+                                            <MdDeleteForever
+                                                className='task-includes__file-item-delete'
+                                                onClick={() => deleteFileFromTask(projectId, taskId, file)}
+                                            />
+                                            {/*<span onClick={() => deleteFileFromTask(projectId, taskId, file)} className='task-includes__file-item-delete'>x</span>*/}
                                         </div>
                                     ))
                                 }
@@ -138,7 +163,9 @@ const TaskInModal = ({ taskId, projectId, projects, changeTaskStatus, addFilesTo
                     </div>
                     <div className="activity__container">
                         <span className="activity__title">Activity</span>
-                        <div className="activity__comments">comments will be here</div>
+                        <div className="activity__comments">
+                            <TaskComments />
+                        </div>
                     </div>
                 </div>
                 <div className="right-col">

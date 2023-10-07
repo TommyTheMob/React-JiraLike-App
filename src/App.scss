@@ -6,3 +6,22 @@
     }
 }
 
+.btn {
+    background: rgba(204, 204, 204, 0.4);
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    text-transform: uppercase;
+    color: #565656;
+
+    padding: 5px 10px;
+
+    //box-shadow: 1px 1px 0 grey;
+
+    &:hover {
+        cursor: pointer;
+        background: #cccccc;
+    }
+}
+
