@@ -7,12 +7,16 @@
 
   }
 
-  &__add-comment-editor {
-
+  &__comments-list-container {
+    margin-top: 20px;
   }
 
-  &__add-comment-btn {
-    margin-top: 10px;
+  &__comments-list-title {
+    color: #565656;
+
+    font-size: 14px;
+    font-weight: 600;
   }
+
 }
 

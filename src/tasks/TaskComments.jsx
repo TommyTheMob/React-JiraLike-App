@@ -1,28 +1,24 @@
 import React from 'react';
-import './taskComments.scss'
-import {Editor} from "@tinymce/tinymce-react";
+import './taskComments.scss';
+import AddComment from "./AddComment";
+import CommentsList from "./CommentsList";
 
-const TaskComments = () => {
+const TaskComments = (props) => {
+
+    const { task } = props
+
     return (
         <div>
             <div className="comments__content">
                 <div className="comments__add-comment-container">
-                    <Editor
-                        apiKey='8ve8okstzg59eg1ewpa2p85hshxcts8o7dw3ze38wwl38v6r'
-                        className='comments__add-comment-editor'
-                        init={{
-                            height: 150,
-                            width: 450,
-                            menubar: false
-                        }}
-                    />
-                    <button
-                        className='comments__add-comment-btn btn'
-                    >
-                        Add Comment
-                    </button>
+                    <AddComment />
                 </div>
-
+                <div className="comments__comments-list-container">
+                    <span className="comments__comments-list-title">Commentaries</span>
+                    <CommentsList
+                        task={task}
+                    />
+                </div>
             </div>
         </div>
     );

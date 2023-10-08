@@ -1,0 +1,13 @@
+.comments {
+
+  &__comments-list {
+    padding: 5px;
+  }
+
+  &__comments-list-item {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+
+  }
+}

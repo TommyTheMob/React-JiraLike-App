@@ -15,7 +15,31 @@ const projectsList = [
                 timeInWork: 0,
                 priority: "low",
                 connectedFiles: [],
-                chainedTo: []
+                chainedTo: [],
+                comments: [
+                    {
+                        id: Math.round(Math.random() * 1000000).toString(),
+                        text: "Поздравляю и желанию дальнейшего процветания. Успехов и всего самого наилучшего. Ваша новость еще раз свидетельство того, что все под силу изменить, если нас много и мы едины.",
+                        comments: [
+                            {
+                                id: Math.round(Math.random() * 1000000).toString(),
+                                text: "Ебать ты хуйню несешь.",
+                                comments: [
+                                    {
+                                        id: Math.round(Math.random() * 1000000).toString(),
+                                        text: "Так да, вообще конч ебаный.",
+                                        comments: []
+                                    },
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        id: Math.round(Math.random() * 1000000).toString(),
+                        text: "Ну типа коммент. Надо было что-то написать, ну я и написал как бы, ну а че? Вовка.",
+                        comments: []
+                    },
+                ]
             },
             {
                 title: "task 2",

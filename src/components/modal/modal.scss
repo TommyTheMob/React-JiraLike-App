@@ -29,6 +29,9 @@
     background: white;
 
     width: 50vw;
+    height: 75vh;
+
+    overflow-y: scroll;
 
     transform: scale(0.5);
     transition: 0.4s all;

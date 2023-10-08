@@ -164,7 +164,9 @@ const TaskInModal = ({ taskId, projectId, setModal, projects, changeTaskStatus, 
                     <div className="activity__container">
                         <span className="activity__title">Activity</span>
                         <div className="activity__comments">
-                            <TaskComments />
+                            <TaskComments
+                                task={task}
+                            />
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,31 @@
+.comments {
+
+  &__comment-container {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+
+    margin-top: 5px;
+  }
+
+  &__comment-content {
+    border-bottom: 1px solid #ccc;
+
+    padding: 5px;
+  }
+
+  &__comment-content-inner {
+    padding: 5px;
+
+    background: rgba(204, 204, 204, 0.2);
+  }
+
+  &__comment-btns {
+    margin: 5px;
+    margin-bottom: 0px;
+  }
+
+  &__comment-add-btn {
+    margin-right: 5px;
+  }
+
+}
