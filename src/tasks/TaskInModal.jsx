@@ -165,6 +165,8 @@ const TaskInModal = ({ taskId, projectId, setModal, projects, changeTaskStatus, 
                         <span className="activity__title">Activity</span>
                         <div className="activity__comments">
                             <TaskComments
+                                projectId={projectId}
+                                taskId={taskId}
                                 task={task}
                             />
                         </div>

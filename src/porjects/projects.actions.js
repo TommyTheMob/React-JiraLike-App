@@ -4,6 +4,9 @@ export const SORT_TASKS_IN_COL_BY_DRAG = 'PROJECTS/SORT_TASKS_IN_COL_BY_DRAG'
 export const ADD_FILES_TO_TASK = 'PROJECTS/ADD_FILES_TO_TASK'
 export const DELETE_FILE_FROM_TASK = 'PROJECTS/DELETE_FILE_FROM_TASK'
 export const EDIT_TASK_DESCRIPTION = 'PROJECTS/EDIT_TASK_DESCRIPTION'
+export const ADD_COMMENT_TO_TASK = 'PROJECTS/ADD_COMMENT_TO_TASK'
+export const EDIT_COMMENT_IN_TASK = 'PROJECTS/EDIT_COMMENT_IN_TASK'
+
 
 export const createProject = (projectName) => {
     return {
@@ -54,6 +57,31 @@ export const editTaskDescription = (projectId, taskId, desc) => {
             projectId,
             taskId,
             desc,
+        }
+    }
+}
+
+export const addCommentToTask = (projectId, taskId, comment) => {
+    return {
+        type: ADD_COMMENT_TO_TASK,
+        payload: {
+            projectId,
+            taskId,
+            comment,
+        }
+    }
+}
+
+export const editCommentInTask = (projectId, taskId, parentCommentId, commentId, nested, newText) => {
+    return {
+        type: EDIT_COMMENT_IN_TASK,
+        payload: {
+            projectId,
+            taskId,
+            parentCommentId,
+            commentId,
+            nested,
+            newText,
         }
     }
 }
