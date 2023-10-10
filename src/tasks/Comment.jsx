@@ -5,18 +5,19 @@ import {BiReply} from "react-icons/bi";
 import {Editor} from "@tinymce/tinymce-react";
 import {connect} from "react-redux";
 import * as ProjectsActions from "../porjects/projects.actions";
+import AddComment from "./AddComment";
 
 const Comment = (props) => {
     const [editing, setEditing] = useState(false)
+    const [replying, setReplying] = useState(false)
     const [editorValue, setEditorValue] = useState('')
 
     const {
         comment,
-        nested,
+        nestLevel,
         projectId,
         taskId,
-        parentCommentId,
-        editCommentInTask,
+        editComment,
     } = props
 
     const {
@@ -25,12 +26,10 @@ const Comment = (props) => {
         id
     } = comment
 
-    // console.log('Comment ==>', 'projectId:', projectId, 'taskId:', taskId)
-
     return (
         <>
-            { nested && <BiReply style={{transform: 'rotate(180deg)'}} />}
-            <div className="comments__comment-container" style={nested ? {border: '2px solid rgba(204, 204, 204, 0.5)'} : {}}>
+            { nestLevel > 0 && <BiReply style={{transform: 'rotate(180deg)'}} />}
+            <div className="comments__comment-container" style={nestLevel > 0 ? {border: `2px solid rgba(204, 204, 204, ${1 - 2*(nestLevel * 10**-1)})`, width: `${100 - (nestLevel + 1)}%`} : {}}>
                 <div className="comments__comment-content">
                     {editing
                         ?
@@ -57,6 +56,20 @@ const Comment = (props) => {
                                 />
                             </>
                     }
+                    {replying
+                        ?
+                            <>
+                                <AddComment
+                                    projectId={projectId}
+                                    taskId={taskId}
+                                    setReplying={setReplying}
+                                    commentId={id}
+                                />
+                            </>
+                        :
+                            <>
+                            </>
+                    }
                 </div>
                 <div className="comments__comment-btns">
                     {editing
@@ -65,7 +78,7 @@ const Comment = (props) => {
                                 <button
                                     className='comments__comment-apply-edit-btn btn'
                                     onClick={() => {
-                                        editCommentInTask(projectId, taskId, parentCommentId, id, nested, editorValue)
+                                        editComment(projectId, taskId, id, editorValue)
                                         setEditing(false)
                                     }}
                                 >
@@ -81,15 +94,23 @@ const Comment = (props) => {
                                 </button>
                             </>
                         :
-                            <>
-                                <button className='comments__comment-add-btn btn'>Reply</button>
-                                <button
-                                    className='comments__comment-edit-btn btn'
-                                    onClick={() => setEditing(true)}
-                                >
-                                    Edit
-                                </button>
-                            </>
+                            replying
+                                ? <></>
+                                :
+                                    <>
+                                        <button
+                                            className='comments__comment-add-btn btn'
+                                            onClick={() => setReplying(true)}
+                                        >
+                                            Reply
+                                        </button>
+                                        <button
+                                            className='comments__comment-edit-btn btn'
+                                            onClick={() => setEditing(true)}
+                                        >
+                                            Edit
+                                        </button>
+                                    </>
                     }
                 </div>
                 {comments && comments.length !== 0
@@ -98,7 +119,7 @@ const Comment = (props) => {
                             projectId={projectId}
                             taskId={taskId}
                             comments={comments}
-                            parentCommentId={id}
+                            nestLevel={nestLevel + 1}
                         />
                     : false
                 }
@@ -108,7 +129,7 @@ const Comment = (props) => {
 };
 
 const mapDispatch = {
-    editCommentInTask: ProjectsActions.editCommentInTask
+    editComment: ProjectsActions.editComment
 }
 
 export default connect(null, mapDispatch)(Comment);

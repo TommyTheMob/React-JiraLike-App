@@ -4,8 +4,8 @@ import {
     ADD_FILES_TO_TASK,
     DELETE_FILE_FROM_TASK,
     EDIT_TASK_DESCRIPTION,
-    ADD_COMMENT_TO_TASK,
-    EDIT_COMMENT_IN_TASK,
+    ADD_COMMENT,
+    EDIT_COMMENT,
     SORT_TASKS_IN_COL_BY_DRAG
 } from "./projects.actions";
 
@@ -258,19 +258,48 @@ export const projectsReducer = (state = initialState, action) => {
                 projectsList: updatedList
             }
         }
-        case ADD_COMMENT_TO_TASK: {
+        case ADD_COMMENT: {
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
             const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+            const comments = currentTask.comments
 
-            const newComment = {
-                id: `${currentTask.id}_comment-${currentTask.comments.length + 1}`,
-                text: action.payload.comment,
-                comments: []
-            }
+            let updatedTask
 
-            const updatedTask = {
-                ...currentTask,
-                comments: currentTask.comments.concat(newComment)
+            // adding reply to comment
+            if (action.payload.parentId !== null) {
+                const addComment = (comments, parentId, text) => {
+                    return comments.map(comment => {
+                        if (comment.id === parentId) {
+                            return {
+                                ...comment,
+                                comments: [
+                                    ...comment.comments,
+                                    {id: Math.round(Math.random() * 1000000), text, comments: []}
+                                ]
+                            }
+                        } else if (comment.comments.length > 0) {
+                            return {
+                                ...comment,
+                                comments: addComment(comment.comments, parentId, text)
+                            }
+                        }
+                        return comment
+                    })
+                }
+
+                updatedTask = {
+                    ...currentTask,
+                    comments: addComment(comments, action.payload.parentId, action.payload.text)
+                }
+
+            // adding new comment to task
+            } else {
+                updatedTask = {
+                    ...currentTask,
+                    comments: currentTask.comments.concat(
+                        {id: Math.round(Math.random() * 1000000), text: action.payload.text, comments: []}
+                    )
+                }
             }
 
             const updatedProject = {
@@ -280,7 +309,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList = projectsList.map(project => (
+            const updatedList= projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 
@@ -288,53 +317,58 @@ export const projectsReducer = (state = initialState, action) => {
                 ...state,
                 projectsList: updatedList
             }
+            // const newComment = {
+            //     id: `${currentTask.id}_comment-${currentTask.comments.length + 1}`,
+            //     text: action.payload.comment,
+            //     comments: []
+            // }
+            //
+            // const updatedTask = {
+            //     ...currentTask,
+            //     comments: currentTask.comments.concat(newComment)
+            // }
+            //
+            // const updatedProject = {
+            //     ...currentProject,
+            //     tasks: currentProject.tasks.map(task => (
+            //         task.id === currentTask.id ? updatedTask : task
+            //     ))
+            // }
+            //
+            // const updatedList = projectsList.map(project => (
+            //     project.id === currentProject.id ? updatedProject : project
+            // ))
+            //
+            // return {
+            //     ...state,
+            //     projectsList: updatedList
+            // }
         }
-        case EDIT_COMMENT_IN_TASK: {
+        case EDIT_COMMENT: {
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
-            console.log('currentProject', currentProject)
             const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
-            console.log('currentTask', currentTask)
+            const comments = currentTask.comments
 
-            let currentComment = {}
-            let updatedComment = {}
-
-            let currentReply = {}
-            let updatedReply = {}
-
-            if (action.payload.nested === false) {
-
-                currentComment = currentTask.comments.find(comment => comment.id === action.payload.commentId)
-                console.log('currentComment', currentComment)
-
-                updatedComment = {
-                    ...currentComment,
-                    text: action.payload.newText
-                }
-            } else {
-                currentComment = currentTask.comments.find(comment => comment.id === action.payload.parentCommentId)
-                console.log('currentComment', currentComment)
-
-                currentReply = currentComment.comments.find(comment => comment.id === action.payload.commentId)
-                console.log('currentReply', currentReply)
-
-                updatedReply = {
-                    ...currentReply,
-                    text: action.payload.newText,
-                }
-
-                updatedComment = {
-                    ...currentComment,
-                    comments: currentComment.comments.map(reply => (
-                        reply.id === currentReply.id ? updatedReply : reply
-                    ))
-                }
+            const editComment = (comments, commentId, text) => {
+                return comments.map(comment => {
+                    if (comment.id === commentId) {
+                        return {
+                            ...comment,
+                            text,
+                        }
+                    } else if (comment.comments.length > 0) {
+                        return {
+                            ...comment,
+                            comments: editComment(comment.comments, commentId, text)
+                        }
+                    }
+                    return comment
+                })
             }
 
             const updatedTask = {
                 ...currentTask,
-                comments: currentTask.comments.map(comment => (
-                    comment.id === currentComment.id ? updatedComment : comment
-                ))
+                comments: editComment(comments, action.payload.commentId, action.payload.newText)
             }
 
             const updatedProject = {
@@ -344,7 +378,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList = projectsList.map(project => (
+            const updatedList= projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 

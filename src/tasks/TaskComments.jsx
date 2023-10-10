@@ -26,6 +26,7 @@ const TaskComments = (props) => {
                         projectId={projectId}
                         taskId={taskId}
                         task={task}
+                        nestLevel={0}
                     />
                 </div>
             </div>

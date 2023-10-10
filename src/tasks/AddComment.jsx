@@ -8,7 +8,9 @@ const AddComment = (props) => {
     const {
         projectId,
         taskId,
-        addCommentToTask,
+        addComment,
+        setReplying,
+        commentId
     } = props
 
     const [editorValue, setEditorValue] = useState('')
@@ -31,8 +33,11 @@ const AddComment = (props) => {
                 <button
                     className='comments__add-comment-btn btn'
                     onClick={() => {
-                        editorValue !== '' &&
-                            addCommentToTask(projectId, taskId, editorValue)
+                        if (editorValue !== '') {
+                            addComment(projectId, taskId, commentId ? commentId : null, editorValue)
+                            setEditorValue('')
+                            setReplying && setReplying(false)
+                        }
                     }}
                 >
                     Add Comment
@@ -41,6 +46,7 @@ const AddComment = (props) => {
                     className='comments__cancel-comment-btn btn'
                     onClick={() => {
                         setEditorValue('')
+                        setReplying && setReplying(false)
                     }}
                 >
                     Cancel
@@ -51,7 +57,7 @@ const AddComment = (props) => {
 };
 
 const mapDispatch = {
-    addCommentToTask: ProjectsActions.addCommentToTask,
+    addComment: ProjectsActions.addComment,
 }
 
 export default connect(null, mapDispatch)(AddComment);

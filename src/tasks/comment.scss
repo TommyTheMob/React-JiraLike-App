@@ -5,6 +5,8 @@
     border-radius: 4px;
 
     margin-top: 5px;
+
+    width: 100%;
   }
 
   &__comment-content {
@@ -20,8 +22,10 @@
   }
 
   &__comment-btns {
-    margin: 5px;
-    margin-bottom: 0px;
+    //margin: 5px;
+    //margin-bottom: 0px;
+
+    padding: 5px;
   }
 
   &__comment-add-btn {
