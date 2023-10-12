@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import * as projectsActions from '../porjects/projects.actions'
+import * as projectsActions from '../projects/projects.actions'
 import {Draggable} from "react-beautiful-dnd";
 
 

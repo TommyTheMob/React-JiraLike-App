@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './addComment.scss'
 import {Editor} from "@tinymce/tinymce-react";
 import {connect} from "react-redux";
-import * as ProjectsActions from "../porjects/projects.actions";
+import * as ProjectsActions from "../projects/projects.actions";
 
 const AddComment = (props) => {
     const {

@@ -1,0 +1,110 @@
+.sub-tasks {
+
+  &__title {
+    color: #565656;
+  }
+
+  &__add-btn {
+    font-size: 16px;
+
+    margin-left: 3px;
+
+    color: #696969;
+
+    cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
+  }
+
+  &__list {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    padding: 5px;
+
+    list-style: none;
+  }
+
+  &__item {
+    background: rgba(204, 204, 204, 0.2);
+
+    border-radius: 4px;
+
+    padding: 3px;
+
+    margin-bottom: 5px;
+  }
+
+  &__item-title,
+  &__item-id {
+    margin-right: 10px;
+  }
+
+  &__item-title {
+    font-weight: 700;
+  }
+
+  &__item-id {
+    font-style: italic;
+  }
+
+  &__item-delete {
+    float: right;
+
+    margin-right: 3px;
+
+    cursor: pointer;
+  }
+
+  &__add-item-container {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    //width: 50px;
+    //height: 50px;
+
+    position: absolute;
+    //left: 100px;
+
+    background: white;
+
+    opacity: 0;
+    transform: translateY(-30px) scaleY(0);
+    visibility: hidden;
+    transition: 0.5s;
+
+    &.visible {
+      transform: translateY(0) scaleY(1);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &__add-item-list {
+    padding: 3px;
+
+  }
+
+  &__add-item {
+    margin-top: 3px;
+
+    padding: 3px;
+
+    border-bottom: 1px solid #ccc;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      background: #ccc;
+    }
+  }
+
+}

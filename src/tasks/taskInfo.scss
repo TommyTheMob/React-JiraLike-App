@@ -1,0 +1,42 @@
+.info {
+
+  &__title {
+    color: #565656;
+  }
+
+  &__list {
+    width: 95%;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    padding: 0 5px;
+
+  }
+
+  &__author-container,
+  &__create-date-container,
+  &__work-time-container,
+  &__prio-container {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 50px;
+
+    padding: 5px;
+
+    border-bottom: 1px solid #ccc;
+  }
+
+  &__prio-container {
+    border-bottom: none;
+  }
+
+  &__author-title,
+  &__create-date-title,
+  &__work-time-title,
+  &__prio-title {
+    color: #565656;
+  }
+
+}

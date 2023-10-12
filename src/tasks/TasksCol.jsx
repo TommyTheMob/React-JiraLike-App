@@ -1,8 +1,8 @@
 import React from 'react';
 import Task from "./Task";
 import {connect} from "react-redux";
-import {getProjectsSelector} from "../porjects/projects.selectors";
-import * as projectsActions from "../porjects/projects.actions";
+import {getProjectsSelector} from "../projects/projects.selectors";
+import * as projectsActions from "../projects/projects.actions";
 import {Droppable} from "react-beautiful-dnd";
 
 

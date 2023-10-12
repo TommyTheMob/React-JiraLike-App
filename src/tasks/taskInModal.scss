@@ -29,12 +29,14 @@
   margin-top: 10px;
 
   padding: 5px;
+
+  text-align: center;
 }
 
 .left-col {
   width: 75%;
 
-  border: 1px solid #ccc;
+  //border: 1px solid #ccc;
 
   margin-right: 5px;
 }
@@ -42,7 +44,8 @@
 .right-col {
   width: 25%;
 
-  border: 1px solid #ccc;
+  border: 3px solid rgba(204, 204, 204, 0.2);
+  border-radius: 4px;
 }
 
 .task-description {
@@ -52,78 +55,6 @@
     padding: 5px;
   }
 
-  &__title-container {
-
-  }
-
-  &__title {
-    color: #565656;
-  }
-
-
-  &__edit-btn {
-    font-size: 12px;
-
-    margin-left: 3px;
-
-    color: #696969;
-
-    cursor: pointer;
-
-    &:hover {
-      background: bisque;
-
-      border-radius: 4px;
-    }
-  }
-
-  &__edit-container {
-
-  }
-
-  &__edit-desc-input {
-    border: none;
-
-    outline: none;
-
-    resize: none;
-
-    min-height: 50px;
-    width: 780px;
-
-    font-size: 16px;
-  }
-
-  &__edit-btn-group {
-    margin-top: 10px;
-  }
-
-  &__apply-edit-btn {
-    margin-right: 5px;
-  }
-
-  &__cancel-edit-btn {
-
-  }
-
-  &__desc {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    padding: 8px;
-
-    overflow-x: hidden;
-
-
-  }
-
-  &__desc-inner {
-    background: rgba(204, 204, 204, 0.2);
-
-    padding: 5px;
-
-    border-radius: 4px;
-  }
 }
 
 .task-includes {
@@ -133,31 +64,6 @@
     padding: 5px;
   }
 
-  &__title {
-    color: #565656;
-  }
-
-  &__add-btn {
-    font-size: 16px;
-
-    margin-left: 3px;
-
-    color: #696969;
-
-    cursor: pointer;
-
-    &:hover {
-      background: bisque;
-
-      border-radius: 4px;
-    }
-  }
-
-  &__content-wrapper {
-    border: 1px solid #ccc;
-
-    padding: 5px;
-  }
 }
 
 .sub-tasks {
@@ -167,17 +73,6 @@
     padding: 5px;
   }
 
-  &__title {
-    color: #565656;
-  }
-
-  &__list {
-    border: 1px solid #ccc;
-
-    padding: 5px;
-
-    list-style: none;
-  }
 }
 
 .activity {
@@ -286,96 +181,6 @@
     flex-direction: column;
     align-items: center;
   }
-
-  &__title {
-    color: #565656;
-  }
-
-  &__list {
-    width: 95%;
-
-    border: 1px solid #ccc;
-
-    padding: 0 5px;
-
-  }
-
-  &__author-container,
-  &__create-date-container,
-  &__work-time-container,
-  &__prio-container {
-    display: flex;
-    justify-content: space-between;
-
-    margin-top: 50px;
-
-    padding: 5px;
-
-    border-bottom: 1px solid #ccc;
-  }
-
-  &__prio-container {
-    border-bottom: none;
-  }
-
-  &__author-title,
-  &__create-date-title,
-  &__work-time-title,
-  &__prio-title {
-    color: #565656;
-  }
-
-}
-
-.task-includes {
-  &__content-wrapper {
-    display: flex;
-    flex-direction: column;
-
-    padding: 5px;
-
-    border-radius: 4px;
-  }
-
-  &__input-file {
-    &.hidden {
-      opacity: 0;
-      height: 0;
-      width: 0;
-      line-height: 0;
-      overflow: hidden;
-      padding: 0;
-      margin: 0;
-    }
-  }
-
-  &__files {
-    margin-top: 10px;
-  }
-
-  &__file-item {
-    margin-bottom: 5px;
-
-    padding: 3px;
-
-    background: rgba(204, 204, 204, 0.2);
-
-    border-radius: 4px;
-  }
-
-  &__file-item-name,
-  &__file-item-type {
-    margin-right: 10px;
-  }
-
-  &__file-item-delete {
-    float: right;
-
-    margin-right: 3px;
-
-    cursor: pointer;
-  }
-
 }
 
 .tox-statusbar__branding {

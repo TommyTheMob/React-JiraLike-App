@@ -6,7 +6,8 @@ export const DELETE_FILE_FROM_TASK = 'PROJECTS/DELETE_FILE_FROM_TASK'
 export const EDIT_TASK_DESCRIPTION = 'PROJECTS/EDIT_TASK_DESCRIPTION'
 export const ADD_COMMENT = 'PROJECTS/ADD_COMMENT'
 export const EDIT_COMMENT = 'PROJECTS/EDIT_COMMENT'
-
+export const ADD_SUBTASK = 'PROJECTS/ADD_SUBTASK'
+export const DELETE_SUBTASK = 'PROJECTS/DELETE_SUBTASK'
 
 export const createProject = (projectName) => {
     return {
@@ -81,6 +82,28 @@ export const editComment = (projectId, taskId, commentId, newText) => {
             taskId,
             commentId,
             newText,
+        }
+    }
+}
+
+export const addSubTask = (projectId, taskId, subTaskId) => {
+    return {
+        type: ADD_SUBTASK,
+        payload: {
+            projectId,
+            taskId,
+            subTaskId
+        }
+    }
+}
+
+export const deleteSubTask = (projectId, taskId, subTaskId) => {
+    return {
+        type: DELETE_SUBTASK,
+        payload: {
+            projectId,
+            taskId,
+            subTaskId
         }
     }
 }

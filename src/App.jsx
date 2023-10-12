@@ -1,5 +1,5 @@
 import './App.scss';
-import ProjectsListPage from "./porjects/ProjectsListPage";
+import ProjectsListPage from "./projects/ProjectsListPage";
 import TasksListPage from "./tasks/TasksListPage";
 import store from "./store";
 import {Provider} from "react-redux";

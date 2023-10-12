@@ -6,6 +6,8 @@ import {
     EDIT_TASK_DESCRIPTION,
     ADD_COMMENT,
     EDIT_COMMENT,
+    ADD_SUBTASK,
+    DELETE_SUBTASK,
     SORT_TASKS_IN_COL_BY_DRAG
 } from "./projects.actions";
 
@@ -21,10 +23,11 @@ const projectsList = [
                 status: "queue",
                 desc: "queued task 1",
                 createdAt: new Date('1995-12-17T03:24:00'),
-                timeInWork: 0,
+                developmentStartTime: null,
+                timeSpentInDevelopment: 0,
                 priority: "low",
                 connectedFiles: [],
-                chainedTo: [],
+                subTasks: ['project-1_task-3'],
                 comments: [
                     {
                         id: 'project-1_task-1_comment-1',
@@ -62,22 +65,26 @@ const projectsList = [
                 status: "development",
                 desc: "task 2 in dev",
                 createdAt: new Date('1995-12-17T03:24:00'),
-                timeInWork: 3600,
+                developmentStartTime: 819159840000,
+                timeSpentInDevelopment: 0,
                 priority: "medium",
                 connectedFiles: "",
-                chainedTo: []
+                subTasks: [],
+                comments: []
             },
             {
                 title: "task 3",
                 id: 'project-1_task-3',
                 author: "",
-                status: "done",
+                status: "development",
                 desc: "task 3 is done",
                 createdAt: new Date('1995-12-17T03:24:00'),
-                timeInWork: 7200,
+                developmentStartTime: 819159840000,
+                timeSpentInDevelopment: 0,
                 priority: "high",
                 connectedFiles: "",
-                chainedTo: []
+                subTasks: [],
+                comments: []
             }
         ]
     },
@@ -158,10 +165,61 @@ export const projectsReducer = (state = initialState, action) => {
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
             const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
 
+            const getDevelopmentStartTime = (taskStatus) => {
+                let developmentStartTime = null
+
+
+                switch (taskStatus) {
+                    case 'development': {
+                        developmentStartTime = +new Date()
+                        return developmentStartTime
+                    }
+                    case 'done': {
+                        developmentStartTime = currentTask.developmentStartTime
+                        return developmentStartTime
+                    }
+                    case 'queue': {
+                        developmentStartTime = null
+                        return developmentStartTime
+                    }
+                    default:
+                        return developmentStartTime
+                }
+            }
+
+            const getTimeSpentInDevelopment = (taskStatus) => {
+                let timeSpentInDevelopment = 0
+
+                switch (taskStatus) {
+                    case 'development': {
+                        timeSpentInDevelopment = currentTask.timeSpentInDevelopment
+                        return timeSpentInDevelopment
+                    }
+                    case 'done': {
+                        if (currentTask.developmentStartTime !== null) {
+                            timeSpentInDevelopment = +new Date() - currentTask.developmentStartTime
+                            return timeSpentInDevelopment
+                        } else {
+                            return 0
+                        }
+
+                    }
+                    case 'queue': {
+                        timeSpentInDevelopment = 0
+                        return timeSpentInDevelopment
+                    }
+                    default:
+                        return timeSpentInDevelopment
+                }
+            }
+
             const newTask = {
                 ...currentTask,
-                status: action.payload.taskStatus
+                status: action.payload.taskStatus,
+                developmentStartTime: getDevelopmentStartTime(action.payload.taskStatus),
+                timeSpentInDevelopment: getTimeSpentInDevelopment(action.payload.taskStatus)
             }
+
 
             const newProject = {
                 ...currentProject,
@@ -369,6 +427,56 @@ export const projectsReducer = (state = initialState, action) => {
             const updatedTask = {
                 ...currentTask,
                 comments: editComment(comments, action.payload.commentId, action.payload.newText)
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList= projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case ADD_SUBTASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                subTasks: currentTask.subTasks.concat(action.payload.subTaskId)
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList= projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case DELETE_SUBTASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                subTasks: currentTask.subTasks.filter(task => task !== action.payload.subTaskId)
             }
 
             const updatedProject = {
