@@ -4,8 +4,11 @@ import {
     CREATE_TASK,
     DELETE_TASK,
     CHANGE_TASK_STATUS,
+    CHANGE_TASK_PRIORITY,
     ADD_FILES_TO_TASK,
     DELETE_FILE_FROM_TASK,
+    EDIT_TASK_TITLE,
+    EDIT_TASK_AUTHOR,
     EDIT_TASK_DESCRIPTION,
     ADD_COMMENT,
     DELETE_COMMENT,
@@ -29,6 +32,7 @@ const projectsList = [
                 createdAt: new Date('1995-12-17T03:24:00'),
                 developmentStartTime: null,
                 timeSpentInDevelopment: 0,
+                developmentEndDate: null,
                 priority: "low",
                 connectedFiles: [],
                 subTasks: ['project-1_task-3'],
@@ -71,6 +75,7 @@ const projectsList = [
                 createdAt: new Date('1995-12-17T03:24:00'),
                 developmentStartTime: 819159840000,
                 timeSpentInDevelopment: 0,
+                developmentEndDate: null,
                 priority: "medium",
                 connectedFiles: "",
                 subTasks: [],
@@ -85,6 +90,7 @@ const projectsList = [
                 createdAt: new Date('1995-12-17T03:24:00'),
                 developmentStartTime: 819159840000,
                 timeSpentInDevelopment: 0,
+                developmentEndDate: null,
                 priority: "high",
                 connectedFiles: "",
                 subTasks: [],
@@ -95,59 +101,11 @@ const projectsList = [
     {
         name: "Project 2",
         id: 'project-2',
-        tasks: [
-            {
-                title: "task 1",
-                id: "project-2_task-1",
-                author: "",
-                status: "done",
-                desc: "",
-                createdAt: new Date(),
-                timeInWork: 0,
-                priority: "",
-                connectedFiles: "",
-                chainedTo: [],
-                comments: []
-            }
-        ]
-    },
-    {
-        name: "Project 3",
-        id: 'project-3',
-        tasks: [
-            {
-                title: "project-3_task-1",
-                id: "1",
-                author: "",
-                status: "",
-                desc: "",
-                createdAt: new Date(),
-                timeInWork: 0,
-                priority: "",
-                connectedFiles: "",
-                chainedTo: []
-            }
-        ]
-    },
-    {
-        name: "Project 4",
-        id: 'project-4',
-        tasks: [
-            {
-                title: "project-4_task-1",
-                id: "1",
-                author: "",
-                status: "",
-                desc: "",
-                createdAt: new Date(),
-                timeInWork: 0,
-                priority: "",
-                connectedFiles: "",
-                chainedTo: []
-            }
-        ]
+        tasks: []
     },
 ]
+
+
 
 const initialState = {
     projectsList,
@@ -177,7 +135,7 @@ export const projectsReducer = (state = initialState, action) => {
                 createdAt: new Date(),
                 developmentStartTime: null,
                 timeSpentInDevelopment: 0,
-                priority: "?",
+                priority: "low",
                 connectedFiles: [],
                 subTasks: [],
                 comments: []
@@ -266,11 +224,59 @@ export const projectsReducer = (state = initialState, action) => {
                 }
             }
 
+            const getDevelopmentEndDate = (taskStatus) => {
+                let developmentEndDate = null
+
+                switch (taskStatus) {
+                    case 'development': {
+                        developmentEndDate = currentTask.developmentEndDate
+                        return developmentEndDate
+                    }
+                    case 'done': {
+                        developmentEndDate = new Date()
+                        return developmentEndDate
+                    }
+                    case 'queue': {
+                        developmentEndDate = null
+                        return developmentEndDate
+                    }
+                    default:
+                        return developmentEndDate
+                }
+            }
+
             const newTask = {
                 ...currentTask,
                 status: action.payload.taskStatus,
                 developmentStartTime: getDevelopmentStartTime(action.payload.taskStatus),
-                timeSpentInDevelopment: getTimeSpentInDevelopment(action.payload.taskStatus)
+                timeSpentInDevelopment: getTimeSpentInDevelopment(action.payload.taskStatus),
+                developmentEndDate: getDevelopmentEndDate(action.payload.taskStatus)
+            }
+
+
+            const newProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? newTask : task
+                )),
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? newProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case CHANGE_TASK_PRIORITY: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const newTask = {
+                ...currentTask,
+                priority: action.payload.prioName
             }
 
 
@@ -326,6 +332,56 @@ export const projectsReducer = (state = initialState, action) => {
             const updatedTask = {
                 ...currentTask,
                 connectedFiles: updatedFiles
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case EDIT_TASK_TITLE: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                title: action.payload.title
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case EDIT_TASK_AUTHOR: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                author: action.payload.name
             }
 
             const updatedProject = {

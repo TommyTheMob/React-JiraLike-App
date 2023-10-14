@@ -1,11 +1,13 @@
 export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT'
 export const CREATE_TASK = 'PROJECTS/CREATE_TASK'
 export const DELETE_TASK = 'PROJECTS/DELETE_TASK'
-
 export const CHANGE_TASK_STATUS = 'PROJECTS/CHANGE_TASK_STATUS'
+export const CHANGE_TASK_PRIORITY = 'PROJECTS/CHANGE_TASK_PRIORITY'
 export const SORT_TASKS_IN_COL_BY_DRAG = 'PROJECTS/SORT_TASKS_IN_COL_BY_DRAG'
 export const ADD_FILES_TO_TASK = 'PROJECTS/ADD_FILES_TO_TASK'
 export const DELETE_FILE_FROM_TASK = 'PROJECTS/DELETE_FILE_FROM_TASK'
+export const EDIT_TASK_TITLE = 'PROJECTS/EDIT_TASK_TITLE'
+export const EDIT_TASK_AUTHOR = 'PROJECTS/EDIT_TASK_AUTHOR'
 export const EDIT_TASK_DESCRIPTION = 'PROJECTS/EDIT_TASK_DESCRIPTION'
 export const ADD_COMMENT = 'PROJECTS/ADD_COMMENT'
 export const EDIT_COMMENT = 'PROJECTS/EDIT_COMMENT'
@@ -54,6 +56,17 @@ export const changeTaskStatus = (projectId, taskId, taskStatus) => {
     }
 }
 
+export const changeTaskPriority = (projectId, taskId, prioName) => {
+    return {
+        type: CHANGE_TASK_PRIORITY,
+        payload: {
+            projectId,
+            taskId,
+            prioName,
+        }
+    }
+}
+
 export const addFilesToTask = (projectId, taskId, filesObject) => {
     return {
         type: ADD_FILES_TO_TASK,
@@ -72,6 +85,28 @@ export const deleteFileFromTask = (projectId, taskId, file) => {
             projectId,
             taskId,
             file,
+        }
+    }
+}
+
+export const editTaskTitle = (projectId, taskId, title) => {
+    return {
+        type: EDIT_TASK_TITLE,
+        payload: {
+            projectId,
+            taskId,
+            title,
+        }
+    }
+}
+
+export const editTaskAuthor = (projectId, taskId, name) => {
+    return {
+        type: EDIT_TASK_AUTHOR,
+        payload: {
+            projectId,
+            taskId,
+            name,
         }
     }
 }

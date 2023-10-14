@@ -113,6 +113,7 @@
     border: 1px solid #ccc;
 
     padding: 3px;
+    margin-top: 3px;
 
     display: flex;
     flex-direction: column;
@@ -122,6 +123,8 @@
     list-style: none;
 
     border-radius: 4px;
+
+    box-shadow: 1px 2px 5px gray;
 
     li {
       border-bottom: 1px solid #ccc;
@@ -186,14 +189,37 @@
 .confirm-creating {
 
   &__container {
-    text-align: center;
-
     margin-top: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
 
-  &__btn {
-    width: 120px;
-    height: 40px;
+  &__apply-btn {
+    width: 80px;
+    height: 35px;
+
+    background: #14f332;
+
+    border: none;
+
+    color: #000000;
+    font-weight: 700;
+
+    box-shadow: 3px 3px 3px rgba(20, 243, 50, 0.4);
+
+    transition: 0.5s;
+
+    &:hover {
+      background: #9cf3a9;
+      color: #4e9132;
+    }
+  }
+
+  &__cancel-btn {
+    width: 80px;
+    height: 35px;
 
     background: #ff0000;
 
@@ -206,24 +232,21 @@
 
     transition: 0.5s;
 
-    &::before {
-      content: 'Creation not confirmed'
-    }
-
     &:hover {
-      background: #14f332;
-
-      color: #000000;
-
-      box-shadow: 3px 3px 3px rgba(20, 243, 50, 0.4);
-
-      &::before {
-        content: 'Apply creation'
-      }
+      background: #ff8e8e;
+      color: #833333;
     }
   }
 }
 
 .tox-statusbar__branding {
   display: none;
+}
+
+.tox-tinymce {
+  z-index: 1;
+}
+
+.tox-editor-header {
+  z-index: 1;
 }

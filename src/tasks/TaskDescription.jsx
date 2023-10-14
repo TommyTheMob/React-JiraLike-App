@@ -3,26 +3,31 @@ import {MdOutlineModeEditOutline} from "react-icons/md";
 import {Editor} from "@tinymce/tinymce-react";
 import {connect} from "react-redux";
 import * as ProjectsActions from '../projects/projects.actions'
-import './taskDescription.scss'
+import './taskDescription.scss';
 
 const TaskDescription = (props) => {
-    const [editDesc, setEditDesc] = useState(false)
+    const [editDesc, setEditDesc] = useState(props.creating ? true : false)
     const [editorValue, setEditorValue] = useState('')
 
     const {
         projectId,
         taskId,
+        creating,
+        type,
+        taskTitle,
         taskDescription,
         editTaskDescription,
+        editTaskTitle
     } = props
+
 
     return (
         <>
             <div className="task-description__title-container">
-                <span className="task-description__title">Description</span>
+                <span className="task-description__title">{type === 'title' ? 'Title' : 'Description'}</span>
                 <MdOutlineModeEditOutline
                     className="task-description__edit-btn"
-                    onClick={() => setEditDesc(true)}
+                    onClick={() => setEditDesc(prev => !prev)}
                 />
             </div>
             {
@@ -31,20 +36,26 @@ const TaskDescription = (props) => {
                     <>
                         <Editor
                             apiKey='8ve8okstzg59eg1ewpa2p85hshxcts8o7dw3ze38wwl38v6r'
-                            initialValue={taskDescription}
+                            initialValue={type === 'title' ? taskTitle : taskDescription}
                             value={editorValue}
                             onEditorChange={(newValue, editor) => {
-                                setEditorValue(editor.getContent())
+                                type === 'title' ? setEditorValue(editor.getContent({ format: 'text' })) : setEditorValue(editor.getContent())
                             }}
-                            init={{
-                                menubar: false,
-                            }}
+                            init={type === 'title'
+                                ?
+                                {
+                                    menubar: false,
+                                    toolbar: false,
+                                    height: 100
+                                }
+                                :{menubar: false}
+                            }
                         />
                         <div className='task-description__edit-btn-group'>
                             <button
                                 className='task-description__apply-edit-btn btn'
                                 onClick={() => {
-                                    editTaskDescription(projectId, taskId, editorValue)
+                                    type === 'title' ? editTaskTitle(projectId, taskId, editorValue) : editTaskDescription(projectId, taskId, editorValue)
                                     setEditDesc(!editDesc)
                                 }}
                             >
@@ -67,7 +78,7 @@ const TaskDescription = (props) => {
                     >
                         <div
                             className="task-description__desc-inner"
-                            dangerouslySetInnerHTML={{ __html: taskDescription }}
+                            dangerouslySetInnerHTML={{ __html: type === 'title' ? taskTitle : taskDescription }}
                         />
                     </div>
 
@@ -78,6 +89,7 @@ const TaskDescription = (props) => {
 
 const mapDispatch = {
     editTaskDescription: ProjectsActions.editTaskDescription,
+    editTaskTitle: ProjectsActions.editTaskTitle
 }
 
 export default connect(null, mapDispatch)(TaskDescription);

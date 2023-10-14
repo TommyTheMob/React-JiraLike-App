@@ -61,6 +61,8 @@
   }
 
   &__add-item-container {
+    z-index: 2;
+
     border: 1px solid #ccc;
     border-radius: 4px;
 
@@ -71,6 +73,8 @@
     //left: 100px;
 
     background: white;
+
+    box-shadow: 1px 2px 5px gray;
 
     opacity: 0;
     transform: translateY(-30px) scaleY(0);

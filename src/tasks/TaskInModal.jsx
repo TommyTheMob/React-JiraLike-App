@@ -13,7 +13,16 @@ import SubTasks from "./SubTasks";
 import TaskInfo from "./TaskInfo";
 
 
-const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTaskStatus, deleteTask, confirmTaskCreating}) => {
+const TaskInModal = ({
+                         taskId,
+                         projectId,
+                         setModal,
+                         creating,
+                         projects,
+                         changeTaskStatus,
+                         deleteTask,
+                         confirmTaskCreating
+                     }) => {
 
     const task = projects
         .find(project => project.id === projectId)
@@ -22,6 +31,7 @@ const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTas
 
 
     const [dropdownVisible, setDropdownVisible] = useState(false)
+    const [prioDropdownVisible, setPrioDropdownVisible] = useState(false)
     const [isAddingSubTasks, setIsAddingSubTasks] = useState(false)
 
     if (!taskId) {
@@ -63,11 +73,28 @@ const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTas
         }
     }
 
+    const getStylesForDropdownBtn = taskStatus => {
+        let styles = {}
+
+        switch (taskStatus) {
+            case 'queue':
+                styles = {background: '#ccc', color: 'black'}
+                return styles
+            case 'development':
+                styles = {background: '#3474eb'}
+                return styles
+            case 'done':
+                styles = {background: '#34eb61', color: 'black'}
+                return styles
+        }
+    }
+
     return (
         <div className="task-modal__container"
              onClick={() => {
                  setDropdownVisible(false)
                  setIsAddingSubTasks(false)
+                 setPrioDropdownVisible(false)
              }}
         >
             <div className="task-modal__header">
@@ -85,14 +112,23 @@ const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTas
             <div className="task-modal__cols">
                 <div className="left-col">
                     <h2 className="task-header">{title}</h2>
-                    {creating === true &&
-                        <span>chmo</span>
-                    }
+                    <div className="task-description__container">
+                        <TaskDescription
+                            projectId={projectId}
+                            taskId={taskId}
+                            taskTitle={title}
+                            creating={creating}
+                            type='title'
+                        />
+                    </div>
+
                     <div className="task-description__container">
                         <TaskDescription
                             projectId={projectId}
                             taskId={taskId}
                             taskDescription={desc}
+                            creating={creating}
+                            type='desc'
                         />
                     </div>
 
@@ -130,10 +166,14 @@ const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTas
                         <div className="status-dropdown">
                             <IconContext.Provider
                                 value={{style: {verticalAlign: 'middle', fontWeight: 'bold', fontSize: '20px'}}}>
-                                <button className="status-dropdown__btn" onClick={(e) => {
-                                    e.stopPropagation();
-                                    setDropdownVisible(!dropdownVisible)
-                                }}>
+                                <button
+                                    className="status-dropdown__btn"
+                                    style={getStylesForDropdownBtn(status)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDropdownVisible(!dropdownVisible)
+                                    }}
+                                >
                                     {status}
                                     {dropdownVisible ? <RiArrowDropUpLine/> : <RiArrowDropDownLine/>}
                                 </button>
@@ -151,18 +191,46 @@ const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTas
 
                     <div className="info__container">
                         <TaskInfo
+                            projectId={projectId}
                             task={task}
+                            creating={creating}
+                            prioDropdownVisible={prioDropdownVisible}
+                            setPrioDropdownVisible={setPrioDropdownVisible}
                         />
                     </div>
 
-                    {creating &&
+                    {creating === true
+                        ?
                         <div className='confirm-creating__container'>
                             <button
-                                className='confirm-creating__btn btn'
+                                className='confirm-creating__apply-btn btn'
                                 onClick={() => {
                                     setModal(false)
                                 }}
-                            />
+                            >
+                                Save
+                            </button>
+                            <button
+                                className='confirm-creating__cancel-btn btn'
+                                onClick={() => {
+                                    setModal(false)
+                                    deleteTask(projectId, taskId)
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        :
+                        <div className='confirm-creating__container'>
+                            <button
+                                className='confirm-creating__cancel-btn btn'
+                                onClick={() => {
+                                    setModal(false)
+                                    deleteTask(projectId, taskId)
+                                }}
+                            >
+                                Delete
+                            </button>
                         </div>
                     }
                 </div>

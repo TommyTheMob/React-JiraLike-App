@@ -26,7 +26,8 @@ const AddComment = (props) => {
                 }}
                 init={{
                     height: 150,
-                    menubar: false
+                    menubar: false,
+                    resize: false,
                 }}
             />
             <div className="comments__add-comment-btn-group">

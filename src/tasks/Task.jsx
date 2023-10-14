@@ -33,7 +33,7 @@ const Task = (props) => {
                 >
                     <div className="item-info">
                         <h4 className="item-header">{title}</h4>
-                        <span className="item-desc">{desc.slice(0,50)}...</span>
+                        <span className="item-desc" dangerouslySetInnerHTML={{__html: desc.length > 50 ? desc.slice(0,50) + '...' : desc}} />
                         <span className="item-id">#{id}</span>
                     </div>
                 </li>
