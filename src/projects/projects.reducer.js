@@ -1,10 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
 import {
     CREATE_PROJECT,
+    CREATE_TASK,
+    DELETE_TASK,
     CHANGE_TASK_STATUS,
     ADD_FILES_TO_TASK,
     DELETE_FILE_FROM_TASK,
     EDIT_TASK_DESCRIPTION,
     ADD_COMMENT,
+    DELETE_COMMENT,
     EDIT_COMMENT,
     ADD_SUBTASK,
     DELETE_SUBTASK,
@@ -35,11 +39,11 @@ const projectsList = [
                         comments: [
                             {
                                 id: 'project-1_task-1_comment-1_comment-1',
-                                text: "Ебать ты хуйню несешь.",
+                                text: "Ты чушь несешь.",
                                 comments: [
                                     {
                                         id: 'project-1_task-1_comment-1_comment-1_comment-1',
-                                        text: "Так да, вообще конч ебаный.",
+                                        text: "Так да, вообще конч.",
                                         comments: []
                                     },
                                 ]
@@ -159,6 +163,55 @@ export const projectsReducer = (state = initialState, action) => {
                     id: Math.round(Math.random() * 1000000),
                     tasks: []
                 })
+            }
+        }
+        case CREATE_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+
+            const newTask = {
+                title: "Type your title",
+                id: action.payload.taskId,
+                author: "Who's author?",
+                status: "queue",
+                desc: "Type task description",
+                createdAt: new Date(),
+                developmentStartTime: null,
+                timeSpentInDevelopment: 0,
+                priority: "?",
+                connectedFiles: [],
+                subTasks: [],
+                comments: []
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.concat(newTask)
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case DELETE_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.filter(task => task.id !== action.payload.taskId)
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
             }
         }
         case CHANGE_TASK_STATUS: {
@@ -350,7 +403,7 @@ export const projectsReducer = (state = initialState, action) => {
                     comments: addComment(comments, action.payload.parentId, action.payload.text)
                 }
 
-            // adding new comment to task
+                // adding new comment to task
             } else {
                 updatedTask = {
                     ...currentTask,
@@ -367,7 +420,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList= projectsList.map(project => (
+            const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 
@@ -375,32 +428,50 @@ export const projectsReducer = (state = initialState, action) => {
                 ...state,
                 projectsList: updatedList
             }
-            // const newComment = {
-            //     id: `${currentTask.id}_comment-${currentTask.comments.length + 1}`,
-            //     text: action.payload.comment,
-            //     comments: []
-            // }
-            //
-            // const updatedTask = {
-            //     ...currentTask,
-            //     comments: currentTask.comments.concat(newComment)
-            // }
-            //
-            // const updatedProject = {
-            //     ...currentProject,
-            //     tasks: currentProject.tasks.map(task => (
-            //         task.id === currentTask.id ? updatedTask : task
-            //     ))
-            // }
-            //
-            // const updatedList = projectsList.map(project => (
-            //     project.id === currentProject.id ? updatedProject : project
-            // ))
-            //
-            // return {
-            //     ...state,
-            //     projectsList: updatedList
-            // }
+        }
+        case DELETE_COMMENT : {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+            const comments = currentTask.comments
+
+            const deleteComment = (comments, commentId) => {
+                return comments.map(comment => {
+                    if (comment.id === commentId) {
+                        return {
+                            ...comment,
+                            deleted: true,
+                            text: 'Comment deleted.'
+                        }
+                    } else if (comment.comments.length > 0) {
+                        return {
+                            ...comment,
+                            comments: deleteComment(comment.comments, commentId)
+                        }
+                    }
+                    return comment
+                })
+            }
+
+            const updatedTask = {
+                ...currentTask,
+                comments: deleteComment(comments, action.payload.commentId)
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
         }
         case EDIT_COMMENT: {
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
@@ -436,7 +507,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList= projectsList.map(project => (
+            const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 
@@ -461,7 +532,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList= projectsList.map(project => (
+            const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 
@@ -486,7 +557,7 @@ export const projectsReducer = (state = initialState, action) => {
                 ))
             }
 
-            const updatedList= projectsList.map(project => (
+            const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
 

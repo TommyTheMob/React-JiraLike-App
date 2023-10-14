@@ -1,0 +1,27 @@
+.create-task-modal {
+
+  &__container {
+
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__header-btns {
+
+  }
+
+  &__close-btn {
+    cursor: pointer;
+  }
+
+  &__content {
+    border: 1px solid #ccc;
+  }
+}
+
+.header__container {
+  border: 1px solid #ccc;
+}

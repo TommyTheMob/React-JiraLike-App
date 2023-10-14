@@ -8,6 +8,7 @@ import TasksCol from "./TasksCol";
 import {DragDropContext} from "react-beautiful-dnd";
 import {connect} from "react-redux";
 import * as projectsActions from '../projects/projects.actions'
+import CreateTask from "./CreateTask";
 
 
 const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) => {
@@ -17,6 +18,10 @@ const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) =>
     // it's for calling modal with current task data
     const [modalActive, setModalActive] = useState(false)
     const [taskId, setTaskId] = useState(0)
+
+    // it's for calling modal with task creation
+    const [modalCreateTask, setModalCreateTask] = useState(false)
+    const [createdTaskId, setCreatedTaskId] = useState(null)
 
 
     const onDragEnd = (result) => {
@@ -51,8 +56,29 @@ const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) =>
                     setModal={setModalActive}
                 />
             </Modal>
+
+            <Modal
+                active={modalCreateTask}
+                setActive={setModalCreateTask}
+                creating={true}
+                projectId={projectId}
+                taskId={createdTaskId}
+            >
+                <TaskInModal
+                    taskId={createdTaskId}
+                    projectId={projectId}
+                    setModal={setModalCreateTask}
+                    creating={true}
+                />
+            </Modal>
+
             <div className="page__content">
-                <Navbar page="tasks" />
+                <Navbar
+                    page="tasks"
+                    projectId={projectId}
+                    setModal={setModalCreateTask}
+                    setCreatedTaskId={setCreatedTaskId}
+                />
                 <div className="container">
                     <h1 className="tasks-list__header">Tasks status</h1>
                     <div className="tasks-list__container">

@@ -1,4 +1,7 @@
 export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT'
+export const CREATE_TASK = 'PROJECTS/CREATE_TASK'
+export const DELETE_TASK = 'PROJECTS/DELETE_TASK'
+
 export const CHANGE_TASK_STATUS = 'PROJECTS/CHANGE_TASK_STATUS'
 export const SORT_TASKS_IN_COL_BY_DRAG = 'PROJECTS/SORT_TASKS_IN_COL_BY_DRAG'
 export const ADD_FILES_TO_TASK = 'PROJECTS/ADD_FILES_TO_TASK'
@@ -8,6 +11,7 @@ export const ADD_COMMENT = 'PROJECTS/ADD_COMMENT'
 export const EDIT_COMMENT = 'PROJECTS/EDIT_COMMENT'
 export const ADD_SUBTASK = 'PROJECTS/ADD_SUBTASK'
 export const DELETE_SUBTASK = 'PROJECTS/DELETE_SUBTASK'
+export const DELETE_COMMENT = 'PROJECTS/DELETE_COMMENT'
 
 export const createProject = (projectName) => {
     return {
@@ -17,6 +21,27 @@ export const createProject = (projectName) => {
         }
     }
 }
+
+export const createTask = (projectId, taskId) => {
+    return {
+        type: CREATE_TASK,
+        payload: {
+            projectId,
+            taskId,
+        }
+    }
+}
+
+export const deleteTask = (projectId, taskId) => {
+    return {
+        type: DELETE_TASK,
+        payload: {
+            projectId,
+            taskId,
+        }
+    }
+}
+
 
 export const changeTaskStatus = (projectId, taskId, taskStatus) => {
     return {
@@ -70,6 +95,17 @@ export const addComment = (projectId, taskId, parentId, text) => {
             taskId,
             parentId,
             text
+        }
+    }
+}
+
+export const deleteComment = (projectId, taskId, commentId) => {
+    return {
+        type: DELETE_COMMENT,
+        payload: {
+            projectId,
+            taskId,
+            commentId
         }
     }
 }

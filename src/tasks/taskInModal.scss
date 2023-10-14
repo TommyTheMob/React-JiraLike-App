@@ -183,6 +183,47 @@
   }
 }
 
+.confirm-creating {
+
+  &__container {
+    text-align: center;
+
+    margin-top: 10px;
+  }
+
+  &__btn {
+    width: 120px;
+    height: 40px;
+
+    background: #ff0000;
+
+    border: none;
+
+    color: #ffffff;
+    font-weight: 700;
+
+    box-shadow: 3px 3px 3px rgba(255, 0, 0, 0.4);
+
+    transition: 0.5s;
+
+    &::before {
+      content: 'Creation not confirmed'
+    }
+
+    &:hover {
+      background: #14f332;
+
+      color: #000000;
+
+      box-shadow: 3px 3px 3px rgba(20, 243, 50, 0.4);
+
+      &::before {
+        content: 'Apply creation'
+      }
+    }
+  }
+}
+
 .tox-statusbar__branding {
   display: none;
 }

@@ -1,0 +1,53 @@
+.header {
+
+  &__title-container {
+
+  }
+
+  &__title {
+    color: #565656;
+  }
+
+  &__edit-btn {
+    font-size: 12px;
+
+    margin-left: 3px;
+
+    color: #696969;
+
+    cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
+  }
+
+  &__edit-btn-group {
+    margin-top: 10px;
+  }
+
+  &__apply-edit-btn {
+    margin-right: 5px;
+  }
+
+  &__desc {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    padding: 8px;
+
+    overflow-x: hidden;
+
+    width: 500px;
+  }
+
+  &__desc-inner {
+    background: rgba(204, 204, 204, 0.2);
+
+    padding: 5px;
+
+    border-radius: 4px;
+  }
+}

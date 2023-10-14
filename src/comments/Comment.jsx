@@ -18,6 +18,7 @@ const Comment = (props) => {
         projectId,
         taskId,
         editComment,
+        deleteComment
     } = props
 
     const {
@@ -29,10 +30,13 @@ const Comment = (props) => {
     return (
         <>
             {nestLevel > 0 && <BiReply style={{transform: 'rotate(180deg)'}}/>}
-            <div className="comments__comment-container" style={nestLevel > 0 ? {
-                border: `2px solid rgba(204, 204, 204, ${1 - (nestLevel * 10 ** -1)})`,
-                width: `${100 - (nestLevel + 1)}%`
-            } : {}}>
+            <div
+                className="comments__comment-container"
+                style={nestLevel > 0
+                    ? {marginLeft: 5 + 'px'}
+                    : {}
+                }
+            >
                 <div className="comments__comment-content">
                     {editing
                         ?
@@ -107,12 +111,23 @@ const Comment = (props) => {
                                 >
                                     Reply
                                 </button>
-                                <button
-                                    className='comments__comment-edit-btn btn'
-                                    onClick={() => setEditing(true)}
-                                >
-                                    Edit
-                                </button>
+                                {!comment.deleted
+                                    &&
+                                        <>
+                                            <button
+                                                className='comments__comment-edit-btn btn'
+                                                onClick={() => setEditing(true)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className='comments__comment-del-btn btn'
+                                                onClick={() => deleteComment(projectId, taskId, id)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </>
+                                }
                             </>
                     }
                 </div>
@@ -132,7 +147,8 @@ const Comment = (props) => {
 };
 
 const mapDispatch = {
-    editComment: ProjectsActions.editComment
+    editComment: ProjectsActions.editComment,
+    deleteComment: ProjectsActions.deleteComment,
 }
 
 export default connect(null, mapDispatch)(Comment);

@@ -13,7 +13,14 @@ import SubTasks from "./SubTasks";
 import TaskInfo from "./TaskInfo";
 
 
-const TaskInModal = ({taskId, projectId, setModal, projects, changeTaskStatus}) => {
+const TaskInModal = ({taskId, projectId, setModal, creating, projects, changeTaskStatus, deleteTask, confirmTaskCreating}) => {
+
+    const task = projects
+        .find(project => project.id === projectId)
+        .tasks
+        .find(task => task.id === taskId)
+
+
     const [dropdownVisible, setDropdownVisible] = useState(false)
     const [isAddingSubTasks, setIsAddingSubTasks] = useState(false)
 
@@ -21,10 +28,9 @@ const TaskInModal = ({taskId, projectId, setModal, projects, changeTaskStatus}) 
         return null
     }
 
-    const task = projects
-        .find(project => project.id === projectId)
-        .tasks
-        .find(task => task.id === taskId)
+    if (!task) {
+        return null
+    }
 
     const {
         id,
@@ -57,7 +63,6 @@ const TaskInModal = ({taskId, projectId, setModal, projects, changeTaskStatus}) 
         }
     }
 
-
     return (
         <div className="task-modal__container"
              onClick={() => {
@@ -70,14 +75,19 @@ const TaskInModal = ({taskId, projectId, setModal, projects, changeTaskStatus}) 
                 <div className="task-modal__header-btns">
                     <AiOutlineClose
                         className="task-modal__close-btn"
-                        onClick={() => setModal(false)}
+                        onClick={() => {
+                            setModal(false)
+                            creating && deleteTask(projectId, taskId)
+                        }}
                     />
                 </div>
             </div>
             <div className="task-modal__cols">
                 <div className="left-col">
                     <h2 className="task-header">{title}</h2>
-
+                    {creating === true &&
+                        <span>chmo</span>
+                    }
                     <div className="task-description__container">
                         <TaskDescription
                             projectId={projectId}
@@ -144,6 +154,17 @@ const TaskInModal = ({taskId, projectId, setModal, projects, changeTaskStatus}) 
                             task={task}
                         />
                     </div>
+
+                    {creating &&
+                        <div className='confirm-creating__container'>
+                            <button
+                                className='confirm-creating__btn btn'
+                                onClick={() => {
+                                    setModal(false)
+                                }}
+                            />
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -158,6 +179,7 @@ const mapState = state => {
 
 const mapDispatch = {
     changeTaskStatus: projectsActions.changeTaskStatus,
+    deleteTask: projectsActions.deleteTask,
 }
 
 export default connect(mapState, mapDispatch)(TaskInModal);
