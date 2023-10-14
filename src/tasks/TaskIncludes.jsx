@@ -1,20 +1,65 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlineFileAdd} from "react-icons/ai";
 import {MdDeleteOutline} from "react-icons/md";
 import {connect} from "react-redux";
 import * as ProjectsActions from '../projects/projects.actions'
 import './taskIncludes.scss'
+import {storage} from '../firebase'
+import {ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const TaskIncludes = (props) => {
-    const filePicker = useRef(null)
 
     const {
         projectId,
         taskId,
-        connectedFiles,
+        // connectedFiles,
         addFilesToTask,
         deleteFileFromTask
     } = props
+
+
+
+    const filePicker = useRef(null)
+    const [connectedFiles, setConnectedFiles] = useState([])
+
+    useEffect(() => {
+        console.log('useEffect')
+
+        const fetchData = async () => {
+            const files = [];
+            for (const url of filesUrls) {
+                const response = await fetch(url);
+                const data = await response.blob();
+                files.push(data);
+            }
+            setConnectedFiles(files);
+        };
+
+        fetchData()
+    }, []);
+
+
+    const handleUpload = (event) => {
+        Object.values(event.target.files).forEach(file => {
+            const storageRef = ref(storage, `${taskId}/files/` + file.name)
+            const uploadTask = uploadBytesResumable(storageRef, file)
+
+            const filesUrls = []
+
+            uploadTask.on('state_changed',
+                snapshot => {},
+                error => console.log(error),
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        filesUrls.push(downloadURL)
+                        console.log(filesUrls)
+                    })
+                }
+            )
+
+            // call the redux action for save urls in state
+        })
+    }
 
     return (
         <>
@@ -27,8 +72,10 @@ const TaskIncludes = (props) => {
                 <input
                     className='task-includes__input-file hidden'
                     type="file" multiple
-                    onChange={(event) => addFilesToTask(projectId, taskId, event.target.files)
-                    }
+                    // onChange={(event) => addFilesToTask(projectId, taskId, event.target.files)}
+                    onChange={(event) => {
+                        handleUpload(event)
+                    }}
                     ref={filePicker}
                 />
                 <div className="task-includes__files">
