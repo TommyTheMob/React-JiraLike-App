@@ -7,9 +7,7 @@ import TaskInModal from "./TaskInModal";
 import TasksCol from "./TasksCol";
 import {DragDropContext} from "react-beautiful-dnd";
 import {connect} from "react-redux";
-import * as projectsActions from '../projects/projects.actions'
-import CreateTask from "./CreateTask";
-
+import * as projectsActions from '../projects/projects.actions';
 
 const TasksListPage = ({ projectId, changeTaskStatus, sortTasksInColbyDrag }) => {
     // it's for search the task on desk

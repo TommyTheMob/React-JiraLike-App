@@ -29,7 +29,7 @@ const projectsList = [
                 author: "Egar",
                 status: "queue",
                 desc: "queued task 1",
-                createdAt: new Date('1995-12-17T03:24:00'),
+                createdAt: '1995-12-17T03:24:00Z',
                 developmentStartTime: null,
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
@@ -39,15 +39,15 @@ const projectsList = [
                 comments: [
                     {
                         id: 'project-1_task-1_comment-1',
-                        text: "Поздравляю и желанию дальнейшего процветания. Успехов и всего самого наилучшего. Ваша новость еще раз свидетельство того, что все под силу изменить, если нас много и мы едины.",
+                        text: "Example comment 1",
                         comments: [
                             {
                                 id: 'project-1_task-1_comment-1_comment-1',
-                                text: "Ты чушь несешь.",
+                                text: "Example reply 1 to comment 1",
                                 comments: [
                                     {
                                         id: 'project-1_task-1_comment-1_comment-1_comment-1',
-                                        text: "Так да, вообще конч.",
+                                        text: "Example reply 1 to reply 1",
                                         comments: []
                                     },
                                 ]
@@ -56,12 +56,12 @@ const projectsList = [
                     },
                     {
                         id: 'project-1_task-1_comment-2',
-                        text: "Ну типа коммент. Надо было что-то написать, ну я и написал как бы, ну а че? Вовка.",
+                        text: "Example comment 2",
                         comments: []
                     },
                     {
                         id: 'project-1_task-1_comment-3',
-                        text: "Еще.",
+                        text: "Example comment 3",
                         comments: []
                     },
                 ]
@@ -72,7 +72,7 @@ const projectsList = [
                 author: "",
                 status: "development",
                 desc: "task 2 in dev",
-                createdAt: new Date('1995-12-17T03:24:00'),
+                createdAt: '1995-12-17T03:24:00Z',
                 developmentStartTime: 819159840000,
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
@@ -87,7 +87,7 @@ const projectsList = [
                 author: "",
                 status: "development",
                 desc: "task 3 is done",
-                createdAt: new Date('1995-12-17T03:24:00'),
+                createdAt: '1995-12-17T03:24:00Z',
                 developmentStartTime: 819159840000,
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
@@ -105,11 +105,11 @@ const projectsList = [
     },
 ]
 
+const savedState = localStorage.getItem('reduxState')
 
-
-const initialState = {
-    projectsList,
-}
+const initialState = savedState
+    ? JSON.parse(savedState)
+    : {projectsList}
 
 export const projectsReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -233,7 +233,7 @@ export const projectsReducer = (state = initialState, action) => {
                         return developmentEndDate
                     }
                     case 'done': {
-                        developmentEndDate = new Date()
+                        developmentEndDate = new Date().toISOString()
                         return developmentEndDate
                     }
                     case 'queue': {

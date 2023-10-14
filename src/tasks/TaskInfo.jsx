@@ -22,14 +22,21 @@ const TaskInfo = (props) => {
 
     const {
         author,
-        createdAt,
-        developmentEndDate,
+        // createdAt,
+        // developmentEndDate,
         status,
         developmentStartTime,
         timeSpentInDevelopment,
         priority,
         id
     } = task
+
+    const createdAt = new Date(task.createdAt)
+
+    let developmentEndDate = null
+    if (task.developmentEndDate) {
+        developmentEndDate = new Date(task.developmentEndDate)
+    }
 
     const getPriosDropdown = (taskPrio) => {
         const prioNames = ['low', 'medium', 'high']
