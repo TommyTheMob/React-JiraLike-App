@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/React-JiraLike-App/static/css/main.4248c62e.css",
-    "main.js": "/React-JiraLike-App/static/js/main.c63bb06e.js",
+    "main.js": "/React-JiraLike-App/static/js/main.79bb041b.js",
     "index.html": "/React-JiraLike-App/index.html",
     "main.4248c62e.css.map": "/React-JiraLike-App/static/css/main.4248c62e.css.map",
-    "main.c63bb06e.js.map": "/React-JiraLike-App/static/js/main.c63bb06e.js.map"
+    "main.79bb041b.js.map": "/React-JiraLike-App/static/js/main.79bb041b.js.map"
   },
   "entrypoints": [
     "static/css/main.4248c62e.css",
-    "static/js/main.c63bb06e.js"
+    "static/js/main.79bb041b.js"
   ]
 }
