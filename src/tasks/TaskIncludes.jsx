@@ -6,6 +6,7 @@ import * as ProjectsActions from '../projects/projects.actions'
 import './taskIncludes.scss'
 import {storage} from '../firebase'
 import {ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
+import {BsCloudDownload} from "react-icons/bs";
 
 const TaskIncludes = (props) => {
 
@@ -104,6 +105,15 @@ const TaskIncludes = (props) => {
                     {connectedFiles.length !== 0
                         ? connectedFiles.map(file => (
                             <div className='task-includes__file-item' key={file.name}>
+                                <BsCloudDownload
+                                    className='task-includes__file-item-download'
+                                    onClick={() => {
+                                        const link = document.createElement('a')
+                                        link.href = file.url
+                                        link.setAttribute('download', true)
+                                        link.click()
+                                    }}
+                                />
                                 <span className='task-includes__file-item-name'
                                       style={{fontWeight: "bold"}}>{file.name.length > 20 ? file.name.slice(0, 20) + '...' : file.name}</span>
                                 <span className='task-includes__file-item-type'>{file.file.type.length > 40 ? file.file.type.slice(0,40) + '...' : file.file.type}</span>

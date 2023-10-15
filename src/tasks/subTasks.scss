@@ -58,6 +58,12 @@
     margin-right: 3px;
 
     cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
   }
 
   &__add-item-container {

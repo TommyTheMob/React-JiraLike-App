@@ -67,5 +67,23 @@
     margin-right: 3px;
 
     cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
+  }
+
+  &__file-item-download {
+    margin-right: 10px;
+
+    cursor: pointer;
+
+    &:hover {
+      background: bisque;
+
+      border-radius: 4px;
+    }
   }
 }
