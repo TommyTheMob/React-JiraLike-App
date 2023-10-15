@@ -14,7 +14,7 @@ const Navbar = ({ page, projectId, createTask, setModal, setCreatedTaskId }) => 
     return (
         <div className="navbar">
             <div className="navbar__container">
-                <Link to="/"><img src={logo} alt="Navbar Logo" className="navbar__logo"/></Link>
+                <Link to="/React-JiraLike-App"><img src={logo} alt="Navbar Logo" className="navbar__logo"/></Link>
                 { page === 'tasks' &&
                     <button
                         className="navbar__create-task-btn"
@@ -29,7 +29,7 @@ const Navbar = ({ page, projectId, createTask, setModal, setCreatedTaskId }) => 
                     </button>
                 }
                 <div className="navbar__pages">
-                    <Link to='/'>
+                    <Link to='/React-JiraLike-App'>
                         <span
                             className={projectPageClassNames}
                         >

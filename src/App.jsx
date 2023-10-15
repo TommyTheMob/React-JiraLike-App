@@ -11,18 +11,18 @@ const projects = store.getState().projects.projectsList
 
 const projectRoutes = projects.map(project => (
     {
-        path: `${project.id}/tasks`,
+        path: `React-JiraLike-App/${project.id}/tasks`,
         element: <TasksListPage page='tasks' projectId={project.id} />
     }
 ))
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: 'React-JiraLike-App/',
         element: <ProjectsListPage page='projects' />
     },
     {
-        path: '/tasks',
+        path: 'React-JiraLike-App/tasks',
         element: <TasksListPage page='tasks' />
     },
     ...projectRoutes,

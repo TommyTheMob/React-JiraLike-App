@@ -141,7 +141,7 @@ export const projectsReducer = (state = initialState, action) => {
                 developmentStartTime: null,
                 timeSpentInDevelopment: 0,
                 priority: "low",
-                connectedFiles: [],
+                connectedFilesURLs: [],
                 subTasks: [],
                 comments: []
             }
