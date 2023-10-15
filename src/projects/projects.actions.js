@@ -5,7 +5,9 @@ export const CHANGE_TASK_STATUS = 'PROJECTS/CHANGE_TASK_STATUS'
 export const CHANGE_TASK_PRIORITY = 'PROJECTS/CHANGE_TASK_PRIORITY'
 export const SORT_TASKS_IN_COL_BY_DRAG = 'PROJECTS/SORT_TASKS_IN_COL_BY_DRAG'
 export const ADD_FILES_TO_TASK = 'PROJECTS/ADD_FILES_TO_TASK'
+export const ADD_FILE_URL_TO_TASK = 'PROJECTS/ADD_FILE_URL_TO_TASK'
 export const DELETE_FILE_FROM_TASK = 'PROJECTS/DELETE_FILE_FROM_TASK'
+export const DELETE_FILE_URL_FROM_TASK = 'PROJECTS/DELETE_FILE_URL_FROM_TASK'
 export const EDIT_TASK_TITLE = 'PROJECTS/EDIT_TASK_TITLE'
 export const EDIT_TASK_AUTHOR = 'PROJECTS/EDIT_TASK_AUTHOR'
 export const EDIT_TASK_DESCRIPTION = 'PROJECTS/EDIT_TASK_DESCRIPTION'
@@ -78,6 +80,17 @@ export const addFilesToTask = (projectId, taskId, filesObject) => {
     }
 }
 
+export const addFileURLToTask = (projectId, taskId, url) => {
+    return {
+        type: ADD_FILE_URL_TO_TASK,
+        payload: {
+            projectId,
+            taskId,
+            url,
+        }
+    }
+}
+
 export const deleteFileFromTask = (projectId, taskId, file) => {
     return {
         type: DELETE_FILE_FROM_TASK,
@@ -85,6 +98,18 @@ export const deleteFileFromTask = (projectId, taskId, file) => {
             projectId,
             taskId,
             file,
+        }
+    }
+}
+
+export const deleteFileURLFromTask = (projectId, taskId, url, fileName) => {
+    return {
+        type: DELETE_FILE_URL_FROM_TASK,
+        payload: {
+            projectId,
+            taskId,
+            url,
+            fileName,
         }
     }
 }

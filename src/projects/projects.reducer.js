@@ -6,7 +6,9 @@ import {
     CHANGE_TASK_STATUS,
     CHANGE_TASK_PRIORITY,
     ADD_FILES_TO_TASK,
+    ADD_FILE_URL_TO_TASK,
     DELETE_FILE_FROM_TASK,
+    DELETE_FILE_URL_FROM_TASK,
     EDIT_TASK_TITLE,
     EDIT_TASK_AUTHOR,
     EDIT_TASK_DESCRIPTION,
@@ -17,6 +19,8 @@ import {
     DELETE_SUBTASK,
     SORT_TASKS_IN_COL_BY_DRAG
 } from "./projects.actions";
+import {deleteObject, ref, listAll} from "firebase/storage";
+import {storage} from "../firebase";
 
 const projectsList = [
     {
@@ -34,7 +38,7 @@ const projectsList = [
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
                 priority: "low",
-                connectedFiles: [],
+                connectedFilesURLs: [],
                 subTasks: ['project-1_task-3'],
                 comments: [
                     {
@@ -77,7 +81,7 @@ const projectsList = [
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
                 priority: "medium",
-                connectedFiles: "",
+                connectedFilesURLs: [],
                 subTasks: [],
                 comments: []
             },
@@ -92,7 +96,7 @@ const projectsList = [
                 timeSpentInDevelopment: 0,
                 developmentEndDate: null,
                 priority: "high",
-                connectedFiles: "",
+                connectedFilesURLs: [],
                 subTasks: [],
                 comments: []
             }
@@ -109,6 +113,7 @@ const savedState = localStorage.getItem('reduxState')
 
 const initialState = savedState
     ? JSON.parse(savedState)
+    // ? {projectsList}
     : {projectsList}
 
 export const projectsReducer = (state = initialState, action) => {
@@ -156,6 +161,19 @@ export const projectsReducer = (state = initialState, action) => {
             }
         }
         case DELETE_TASK: {
+            async function deleteFolderContents(folderPath) {
+                const storageRef = ref(storage, folderPath)
+                const files = await listAll(storageRef)
+
+                const deletePromises = files.items.map((fileRef) => {
+                    return deleteObject(fileRef)
+                })
+
+                await Promise.all(deletePromises)
+
+                console.log(`Task folder ${folderPath} in storage deleted`)
+            }
+
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
 
             const updatedProject = {
@@ -166,6 +184,8 @@ export const projectsReducer = (state = initialState, action) => {
             const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
+
+            deleteFolderContents(`${action.payload.taskId}/files`);
 
             return {
                 ...state,
@@ -323,6 +343,33 @@ export const projectsReducer = (state = initialState, action) => {
                 projectsList: updatedList
             }
         }
+        case ADD_FILE_URL_TO_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                connectedFilesURLs: !currentTask.connectedFilesURLs.includes(action.payload.url)
+                    ? currentTask.connectedFilesURLs.concat(action.payload.url)
+                    : currentTask.connectedFilesURLs
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
         case DELETE_FILE_FROM_TASK: {
             const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
             const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
@@ -344,6 +391,40 @@ export const projectsReducer = (state = initialState, action) => {
             const updatedList = projectsList.map(project => (
                 project.id === currentProject.id ? updatedProject : project
             ))
+
+            return {
+                ...state,
+                projectsList: updatedList
+            }
+        }
+        case DELETE_FILE_URL_FROM_TASK: {
+            const currentProject = state.projectsList.find(project => project.id === action.payload.projectId)
+            const currentTask = currentProject.tasks.find(task => task.id === action.payload.taskId)
+
+            const updatedTask = {
+                ...currentTask,
+                connectedFilesURLs: currentTask.connectedFilesURLs.filter(url => url !== action.payload.url)
+            }
+
+            const updatedProject = {
+                ...currentProject,
+                tasks: currentProject.tasks.map(task => (
+                    task.id === currentTask.id ? updatedTask : task
+                ))
+            }
+
+            const updatedList = projectsList.map(project => (
+                project.id === currentProject.id ? updatedProject : project
+            ))
+
+            const storageRef = ref(storage, `${action.payload.taskId}/files/` + action.payload.fileName);
+
+            // Delete the file
+            deleteObject(storageRef).then(() => {
+                console.log(`Deleting file ${action.payload.fileName} from firebase storage finished successfully!`)
+            }).catch((error) => {
+                console.log(`Deleting file ${action.payload.fileName} from firebase storage failed :(`)
+            });
 
             return {
                 ...state,

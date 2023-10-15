@@ -46,7 +46,7 @@ const TaskInModal = ({
         id,
         title,
         status,
-        connectedFiles,
+        connectedFilesURLs,
         desc,
         subTasks,
     } = task
@@ -136,7 +136,7 @@ const TaskInModal = ({
                         <TaskIncludes
                             projectId={projectId}
                             taskId={taskId}
-                            connectedFiles={connectedFiles}
+                            connectedFilesURLs={connectedFilesURLs}
                         />
                     </div>
 

@@ -5,60 +5,82 @@ import {connect} from "react-redux";
 import * as ProjectsActions from '../projects/projects.actions'
 import './taskIncludes.scss'
 import {storage} from '../firebase'
-import {ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
 
 const TaskIncludes = (props) => {
 
     const {
         projectId,
         taskId,
-        // connectedFiles,
-        addFilesToTask,
-        deleteFileFromTask
+        connectedFilesURLs,
+        addFileURLToTask,
+        deleteFileURLFromTask,
     } = props
 
+    const fetchData = async (urls) => {
+        const files = [];
+
+        for (const url of urls) {
+            console.log('fetching url:', url)
+            const fileName = url.substring(url.lastIndexOf('%2F') + 3, url.lastIndexOf('?'))
+
+            const response = await fetch(url)
+            const data = await response.blob()
+
+            const dataObj = {}
+            dataObj.name = fileName
+            dataObj.file = data
+            dataObj.url = url
+
+            files.push(dataObj)
+
+        }
+        setConnectedFiles(files)
+        console.log('connectedFiles:', files)
+    };
 
 
     const filePicker = useRef(null)
     const [connectedFiles, setConnectedFiles] = useState([])
 
     useEffect(() => {
-        console.log('useEffect')
+        console.group('useEffect==>')
+        console.log('connectedFilesURLs:', connectedFilesURLs)
 
-        const fetchData = async () => {
-            const files = [];
-            for (const url of filesUrls) {
-                const response = await fetch(url);
-                const data = await response.blob();
-                files.push(data);
-            }
-            setConnectedFiles(files);
-        };
+        if (connectedFilesURLs.length > 0) {
+            fetchData(connectedFilesURLs);
+        } else {
+            setConnectedFiles([])
+        }
 
-        fetchData()
-    }, []);
+        console.groupEnd()
+    }, [connectedFilesURLs]);
 
 
     const handleUpload = (event) => {
-        Object.values(event.target.files).forEach(file => {
+
+        const files = event.target.files
+        console.log('files', files)
+
+        for (const file of Object.values(files)) {
             const storageRef = ref(storage, `${taskId}/files/` + file.name)
             const uploadTask = uploadBytesResumable(storageRef, file)
 
-            const filesUrls = []
-
             uploadTask.on('state_changed',
-                snapshot => {},
+                snapshot => {
+                },
                 error => console.log(error),
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        filesUrls.push(downloadURL)
-                        console.log(filesUrls)
-                    })
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    addFileURLToTask(projectId, taskId, downloadURL)
                 }
             )
+        }
+    }
 
-            // call the redux action for save urls in state
-        })
+    const handleDelete = (fileURL, fileName) => {
+        deleteFileURLFromTask(projectId, taskId, fileURL, fileName)
+
     }
 
     return (
@@ -82,12 +104,14 @@ const TaskIncludes = (props) => {
                     {connectedFiles.length !== 0
                         ? connectedFiles.map(file => (
                             <div className='task-includes__file-item' key={file.name}>
-                                <span className='task-includes__file-item-name' style={{fontWeight:"bold"}}>{file.name.slice(0, 11)}</span>
-                                <span className='task-includes__file-item-type'>{file.type}</span>
-                                <span className='task-includes__file-item-size'>{(file.size * 10**-6).toString().slice(0, 4)} Mb</span>
+                                <span className='task-includes__file-item-name'
+                                      style={{fontWeight: "bold"}}>{file.name.length > 20 ? file.name.slice(0, 20) + '...' : file.name}</span>
+                                <span className='task-includes__file-item-type'>{file.file.type.length > 40 ? file.file.type.slice(0,40) + '...' : file.file.type}</span>
+                                <span
+                                    className='task-includes__file-item-size'>{(file.file.size * 10 ** -6).toString().slice(0, 4)} Mb</span>
                                 <MdDeleteOutline
                                     className='task-includes__file-item-delete'
-                                    onClick={() => deleteFileFromTask(projectId, taskId, file)}
+                                    onClick={() => handleDelete(file.url, file.name)}
                                 />
                             </div>
                         ))
@@ -100,8 +124,8 @@ const TaskIncludes = (props) => {
 };
 
 const mapDispatch = {
-    addFilesToTask: ProjectsActions.addFilesToTask,
-    deleteFileFromTask: ProjectsActions.deleteFileFromTask
+    addFileURLToTask: ProjectsActions.addFileURLToTask,
+    deleteFileURLFromTask: ProjectsActions.deleteFileURLFromTask
 }
 
 export default connect(null, mapDispatch)(TaskIncludes);
