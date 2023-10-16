@@ -250,3 +250,34 @@
 .tox-editor-header {
   z-index: 1;
 }
+
+@media (max-width: 2100px) {
+  .right-col {
+    width: 35%;
+  }
+
+  .left-col {
+    width: 65%;
+  }
+}
+
+@media (max-width: 775px) {
+
+  .task-modal {
+    &__cols {
+      display: block;
+    }
+  }
+
+  .right-col {
+    width: 100%;
+  }
+
+  .left-col {
+    width: 100%;
+  }
+
+  .confirm-creating__container {
+    margin-bottom: 5px;
+  }
+}

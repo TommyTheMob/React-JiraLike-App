@@ -118,3 +118,21 @@
   }
 
 }
+
+@media (max-width: 850px) {
+  .sub-tasks {
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      overflow-x: hidden;
+    }
+
+    &__item-delete {
+      float: none;
+
+    }
+  }
+}

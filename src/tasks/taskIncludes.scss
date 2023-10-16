@@ -87,3 +87,21 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .task-includes {
+
+    &__file-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      overflow-x: hidden;
+
+    }
+
+    &__file-item-delete {
+      float: none;
+    }
+  }
+}

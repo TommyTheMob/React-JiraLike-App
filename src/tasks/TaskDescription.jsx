@@ -75,6 +75,9 @@ const TaskDescription = (props) => {
                     :
                     <div
                         className="task-description__desc"
+                        onClick={(e) => {
+                            setEditDesc(true)
+                        }}
                     >
                         <div
                             className="task-description__desc-inner"

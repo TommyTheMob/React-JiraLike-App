@@ -150,3 +150,20 @@
     cursor: pointer;
   }
 }
+
+@media (max-width: 1042px) {
+  .info {
+
+    &__author-container,
+    &__create-date-container,
+    &__work-time-container,
+    &__prio-container {
+      margin-top: 5px;
+
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+

@@ -42,3 +42,12 @@
   }
 
 }
+
+@media (max-width: 1920px) {
+  .modal {
+
+    &__content {
+      width: 75vw;
+    }
+  }
+}

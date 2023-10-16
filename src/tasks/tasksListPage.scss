@@ -147,3 +147,20 @@
 
   padding: 5px;
 }
+
+@media (max-width: 920px) {
+  .tasks-list {
+
+    &__tasks-cols {
+      overflow-y: scroll;
+
+      justify-content: start;
+
+    }
+
+    &__tasks-col {
+      margin-right: 10px;
+
+    }
+  }
+}

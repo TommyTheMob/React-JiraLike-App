@@ -93,3 +93,43 @@
     
   }
 }
+
+@media (max-width: 762px) {
+  .navbar {
+
+    &__container {
+
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 470px) {
+  .navbar {
+
+    &__pages {
+      display: flex;
+      flex-direction: column;
+
+      margin-right: 3px;
+    }
+
+    &__page {
+      margin: 0;
+      padding: 2px 5px;
+
+      font-size: 14px;
+
+      text-align: center;
+    }
+
+    &__create-task-btn {
+      width: 75px;
+      height: 40px;
+
+      font-size: 14px;
+
+
+    }
+  }
+}

@@ -151,7 +151,15 @@ const TaskInfo = (props) => {
                                     ok
                                 </button>
                             </div>
-                            : <span className="info__author-name">{author}</span>
+                            : <span
+                                className="info__author-name"
+                                style={creating ? {cursor: 'pointer'} : {}}
+                                onClick={() => {
+                                    creating && setEditing(true)
+                                }}
+                            >
+                                {author}
+                            </span>
                     }
                 </div>
                 <div className="info__create-date-container">

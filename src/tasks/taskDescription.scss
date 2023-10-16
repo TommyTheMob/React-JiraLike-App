@@ -62,7 +62,9 @@
 
     overflow-x: hidden;
 
-
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__desc-inner {
@@ -71,5 +73,29 @@
     padding: 5px;
 
     border-radius: 4px;
+  }
+}
+
+@media (max-width: 430px) {
+  .task-description {
+
+    &__edit-btn-group {
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+    }
+
+    &__apply-edit-btn {
+      margin-right: 0;
+
+      width: 150px;
+    }
+
+    &__cancel-edit-btn {
+      margin-top: 3px;
+
+      width: 150px;
+    }
   }
 }

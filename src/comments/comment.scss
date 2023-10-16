@@ -41,3 +41,24 @@
   }
 
 }
+
+@media (max-width: 500px) {
+  .comments {
+
+    &__comment-btns {
+
+    }
+
+    &__comment-apply-edit-btn,
+    &__comment-cancel-edit-btn,
+    &__comment-add-btn,
+    &__comment-edit-btn,
+    &__comment-del-btn {
+      border: none;
+
+      background: none;
+
+      padding: 0;
+    }
+  }
+}

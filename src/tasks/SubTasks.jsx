@@ -51,7 +51,7 @@ const SubTasks = (props) => {
                                     >
                                         <span style={{fontWeight: 'bold'}}>{task.title}</span>
                                         &nbsp;
-                                        <span style={{fontStyle: 'italic'}}>#{task.id}</span>
+                                        <span style={{fontStyle: 'italic'}}>#{task.id.slice(0, 8) + '...'}</span>
                                     </li>
                                 )
                             })
@@ -79,7 +79,7 @@ const SubTasks = (props) => {
                                 }
                             >
                                 <span className="sub-tasks__item-title">{subTaskData.title}</span>
-                                <span className="sub-tasks__item-id">#{subTaskData.id}</span>
+                                <span className="sub-tasks__item-id">#{subTaskData.id.slice(0,9) + '...'}</span>
                                 <span className="sub-tasks__item-status">{subTaskData.status}</span>
                                 <MdDeleteOutline
                                     className='sub-tasks__item-delete'

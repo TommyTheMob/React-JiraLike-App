@@ -12,3 +12,23 @@
     margin-right: 5px;
   }
 }
+
+@media (max-width: 430px) {
+  .comments {
+
+    &__add-comment-btn-group {
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+    }
+
+    &__add-comment-btn {
+      margin-right: 0;
+    }
+
+    &__cancel-comment-btn {
+      margin-top: 3px;
+    }
+  }
+}
